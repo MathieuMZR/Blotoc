@@ -44,25 +44,21 @@ public class Teleporter : MonoBehaviour
         if (other.GetComponent<CubeObject>())
         {
             var c = other.GetComponent<CubeObject>();
-            c.onMoveFinished += () =>
-            {
-                c.StopAllCoroutines();
-                c.CollisionManaging(false);
-                c.transform.DOScale(Vector3.zero, c.GetMoveDelay() / 2f).SetEase(Ease.Linear).OnComplete(
-                    () =>
+            c.StopAllCoroutines();
+            c.CollisionManaging(false);
+            c.transform.DOScale(Vector3.zero, c.GetMoveDelay() / 2f).SetEase(Ease.Linear).OnComplete(
+                () =>
+                {
+                    c.transform.DOMove(pairTeleporter.transform.position, 0.1f).OnComplete(() =>
                     {
-                        c.transform.DOMove(pairTeleporter.transform.position, 0.1f).OnComplete(() =>
-                        {
-                            c.transform.DOScale(Vector3.one, c.GetMoveDelay() / 2f).SetEase(Ease.Linear)
-                                .OnComplete(() =>
-                                {
-                                    c.onMoveFinished = null;
-                                    c.CollisionManaging(true);
-                                    c.StartCoroutine(c.CubeMove());
-                                });
-                        });
+                        c.transform.DOScale(Vector3.one, c.GetMoveDelay() / 2f).SetEase(Ease.Linear)
+                            .OnComplete(() =>
+                            {
+                                c.CollisionManaging(true);
+                                c.StartCoroutine(c.CubeMove());
+                            });
                     });
-            };
+                });
         }
     }
 

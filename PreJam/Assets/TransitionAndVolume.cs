@@ -74,7 +74,7 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
     
     void SetImagePosition(Vector3 worldPos)
     {
-        var mainCamera = Camera.main;
+        var mainCamera = GameManager.Instance.cam;
         
         // Convert the world position to screen position in camera space
         Vector3 screenPos = mainCamera.WorldToScreenPoint(worldPos);
@@ -93,6 +93,8 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
 
     public IEnumerator NextLevel()
     {
+        HUD.Instance.onLevelChange.Invoke();
+        
         transImg.material.DOFloat(1f, _transition, duration).SetEase(ease).SetUpdate(true);
 
         yield return new WaitForSecondsRealtime(duration + 1f);
@@ -107,6 +109,8 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
     
     public IEnumerator PreviousLevel()
     {
+        HUD.Instance.onLevelChange.Invoke();
+        
         transImg.material.DOFloat(1f, _transition, duration).SetEase(ease).SetUpdate(true);
 
         yield return new WaitForSecondsRealtime(duration + 1f);

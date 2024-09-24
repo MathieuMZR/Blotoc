@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3656446408611201273
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,14 +7,15 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Grid
-  m_Shader: {fileID: -6465566751694194690, guid: 2b10a9b4f2ffac54eb4ceef4e32143ac,
+  m_Name: M_RotatingSpikes
+  m_Shader: {fileID: -6465566751694194690, guid: 7b7920ab4cd8e8e46af4747c7e48e546,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_InvalidKeywords:
+  - _EMISSION
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -62,7 +50,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 07eb000d049dd1c44a25c15fcf96d12c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -79,18 +67,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Triplanar_576b639f95e1470a93d3b810937db77b_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: aabed95a1f753a8459511bad546019a1, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Triplanar_68e2450789334eba8598d4fd2630c4b7_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: aabed95a1f753a8459511bad546019a1, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Triplanar_975eb1b66f8341408aead85c95343137_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 822b9a5669b2951448a6dc9f33892aef, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -118,48 +94,49 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DotBoost: 0.6
-    - _DotReduce: 0.2
+    - _DotBoost: 0
     - _DotSize: 0.8
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FrequencyLines: 0.5
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _GridSize: 1
-    - _GridThickness: 0.2
-    - _GridVisibility: 0.2
-    - _LinesBoost: 0.1
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _OffsetLines: 0
+    - _OverallSize: 1
     - _Parallax: 0.005
-    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _ShadowIntensityTreshold: 0
-    - _Size: 0.8
-    - _Smoothness: 0
+    - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
-    - _Steps: 5
     - _Surface: 0
-    - _ThicknessLines: 0.2
-    - _Tile: 8
-    - _TileDot: 8
-    - _WorkflowMode: 0
+    - _Tile: 7
+    - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0, g: 0.48627424, b: 1, a: 1}
-    - _Color: {r: 0, g: 0.48627424, b: 1, a: 1}
-    - _Color_1: {r: 0, g: 0.3715956, b: 1, a: 1}
-    - _Color_2: {r: 0, g: 0.37617442, b: 0.7735849, a: 1}
+    - _BaseColor: {r: 1, g: 0.8578305, b: 0, a: 1}
+    - _Color: {r: 0, g: 0, b: 0.735849, a: 1}
+    - _Color_1: {r: 0, g: 0, b: 0.20754719, a: 1}
+    - _DotColor: {r: 1, g: 0.6, b: 0, a: 1}
     - _DotTiling: {r: 1, g: 1, b: 0, a: 0}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GridColor: {r: 0.15566039, g: 0.44966274, b: 1, a: 0}
+    - _EmissionColor: {r: 19.698313, g: 13.080624, b: 0, a: 1}
+    - _Offset: {r: -0.05, g: 0.02, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
+--- !u!114 &2893018382442672185
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7

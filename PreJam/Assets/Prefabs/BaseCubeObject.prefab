@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 6366481400558766182}
   - component: {fileID: 904574109969560468}
   - component: {fileID: 9000467398518732561}
+  - component: {fileID: 6343030550922343609}
   m_Layer: 7
   m_Name: BaseCubeObject
   m_TagString: Untagged
@@ -80,6 +81,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveDuration: 0.3
+  speedModifier: 1
+  direction: {x: 0, y: 0, z: 0}
   moveCurve: 4
   rotateCurve: 4
   pivot: {fileID: 3770126469242842197}
@@ -133,6 +136,47 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 0.1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6343030550922343609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4513496494120017222}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a086bc7d92b3bd94ca123d8507b943ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mr: {fileID: 1994295588698744640}
+  mat: {fileID: 2100000, guid: 253221191e56b54408877dc54df04424, type: 2}
+  delayBetweenSpawn: 0.3
+  dispawnDuration: 0.5
+  delayBeforeDispawn: 1
+  dispawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8309264518408527218
 GameObject:
   m_ObjectHideFlags: 0

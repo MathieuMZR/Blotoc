@@ -12,6 +12,8 @@ public class GameManager : GenericSingletonClass<GameManager>
     public LevelInfo level;
     public int tileSize = 10;
 
+    public Camera cam;
+
     public int winCube;
     public CubeObject lastCube;
     
@@ -24,6 +26,7 @@ public class GameManager : GenericSingletonClass<GameManager>
     private void Start()
     {
         Time.timeScale = 1f;
+        cam = Camera.main;
 
         VerifyLevelIndex();
     }
@@ -76,33 +79,30 @@ public class GameManager : GenericSingletonClass<GameManager>
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            foreach (var v in FindObjectsOfType<DirectionChanger>())
-            {
-                v.SetNewDirection((int)RotateMode.ClockWise);
-            }
-            foreach (var v in FindObjectsOfType<SwitchBloc>())
-            {
-                v.Switch();
-            }
-            foreach (var t in FindObjectsOfType<Teleporter>())
-            {
-                if(t.canSwitch) t.Switch();
-            }
+            InputAction(RotateMode.ClockWise);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            foreach (var v in FindObjectsOfType<DirectionChanger>())
-            {
-                v.SetNewDirection((int)RotateMode.CounterClockWise);
-            }
-            foreach (var v in FindObjectsOfType<SwitchBloc>())
-            {
-                v.Switch();
-            }
-            foreach (var t in FindObjectsOfType<Teleporter>())
-            {
-                if(t.canSwitch) t.Switch();
-            }
+            InputAction(RotateMode.CounterClockWise);
+        }
+    }
+
+    void InputAction(RotateMode mode)
+    {
+        cam.transform.DOKill();
+        cam.DOShakePosition(.35f, .025f, 100).SetEase(Ease.OutSine);
+        
+        foreach (var v in FindObjectsOfType<DirectionChanger>())
+        {
+            v.SetNewDirection((int)mode);
+        }
+        foreach (var v in FindObjectsOfType<SwitchBloc>())
+        {
+            v.Switch();
+        }
+        foreach (var t in FindObjectsOfType<Teleporter>())
+        {
+            if(t.canSwitch) t.Switch();
         }
     }
     

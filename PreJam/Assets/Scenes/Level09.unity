@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 0
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1640,6 +1639,74 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 399458901}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &733117923
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.00000004470348
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3496030493905570472, guid: f354784a0ff07834796fe31d278d72fc,
+        type: 3}
+      propertyPath: m_Name
+      value: Wall04
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f354784a0ff07834796fe31d278d72fc, type: 3}
 --- !u!4 &808836078 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2729902378742385429, guid: f354784a0ff07834796fe31d278d72fc,
@@ -3361,6 +3428,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: DirectionChanger
       objectReference: {fileID: 0}
+    - target: {fileID: 5073958562918360657, guid: 05997f7e40a27f14799fb1dc3c470c4d,
+        type: 3}
+      propertyPath: direction.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5073958562918360657, guid: 05997f7e40a27f14799fb1dc3c470c4d,
+        type: 3}
+      propertyPath: direction.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3583,6 +3660,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwitchBloc
       objectReference: {fileID: 0}
+    - target: {fileID: 2002989890684353741, guid: 0c6430d434230b54d97f6d87eb1126f4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5419023111917376979, guid: 0c6430d434230b54d97f6d87eb1126f4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3658,3 +3740,4 @@ SceneRoots:
   - {fileID: 36024305}
   - {fileID: 1397427826}
   - {fileID: 1825128047}
+  - {fileID: 733117923}

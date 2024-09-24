@@ -2,10 +2,15 @@ using System;
 using System.Collections;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class CubeObject : MonoBehaviour
 {
     public float moveDuration;
+    public float speedModifier = 1f;
+    public Vector3 direction;
+    public bool isInvisible;
     
     [SerializeField] private Ease moveCurve;
     [SerializeField] private Ease rotateCurve;
@@ -13,11 +18,7 @@ public class CubeObject : MonoBehaviour
     [SerializeField] private Transform pivot;
     [SerializeField] private ParticleSystem psDestroy;
 
-    public Action onMoveFinished;
-
     private Collider _col;
-    private float _speedModifier = 1f;
-    private Vector3 _direction;
 
     private void Awake()
     {
@@ -57,6 +58,11 @@ public class CubeObject : MonoBehaviour
             Instantiate(psDestroy, transform.position, Quaternion.identity);
             
             GameManager.Instance.EndGame();
+
+            var cam = GameManager.Instance.cam;
+            cam.transform.DOKill();
+            cam.DOShakePosition(.5f, .15f, 100).SetEase(Ease.OutSine);
+            
             Destroy(gameObject);
         }
     }
@@ -64,29 +70,29 @@ public class CubeObject : MonoBehaviour
     public IEnumerator CubeMove()
     {
         var pos = transform.position;
-        var newPos = pos + _direction * GameManager.Instance.tileSize;
+        var newPos = pos + direction * GameManager.Instance.tileSize;
         
         pivot.transform.rotation = Quaternion.identity;
         var rot = pivot.transform.rotation * GetAngleFromDirectionMoving();
 
-        transform.DOMove(newPos, moveDuration / _speedModifier).SetEase(moveCurve).OnComplete(()=> onMoveFinished.Invoke());
-        pivot.transform.DORotateQuaternion(rot, moveDuration / _speedModifier).SetEase(rotateCurve);
+        transform.DOMove(newPos, moveDuration / speedModifier).SetEase(moveCurve);
+        pivot.transform.DORotateQuaternion(rot, moveDuration / speedModifier).SetEase(rotateCurve);
 
-        yield return new WaitForSeconds((moveDuration / _speedModifier) * 1.5f);
+        yield return new WaitForSeconds((moveDuration / speedModifier) * 1.5f);
 
         StartCoroutine(CubeMove());
     }
 
-    public float GetMoveDelay() => (moveDuration / _speedModifier);
+    public float GetMoveDelay() => (moveDuration / speedModifier);
 
     public void SetNewDirection(Vector3 newDir)
     {
-        _direction = newDir;
+        direction = newDir;
     }
 
     public void SetNewSpeedModifier(float m)
     {
-        _speedModifier = m;
+        speedModifier = m;
     }
 
     Quaternion GetAngleFromDirectionMoving()
@@ -94,23 +100,51 @@ public class CubeObject : MonoBehaviour
         var treshold = 0.5f;
         var angle = new Vector3(0,0,0);
         
-        if (_direction.x > treshold)
+        if (direction.x > treshold)
         {
             angle = new Vector3(0, 0, -90);
         }
-        else if (_direction.x < -treshold)
+        else if (direction.x < -treshold)
         {
             angle = new Vector3(0, 0, 90);
         }
-        else if (_direction.z > treshold)
+        else if (direction.z > treshold)
         {
             angle = new Vector3(90, 0, 0);
         }
-        else if (_direction.z < -treshold)
+        else if (direction.z < -treshold)
         {
             angle = new Vector3(-90, 0, 0);
         }
 
         return Quaternion.Euler(angle);
+    }
+
+    [SerializeField] private int blinkAmount = 5;
+    [SerializeField] private float blinkDelay = 0.05f;
+    public IEnumerator InvisibleBlink()
+    {
+        var mr = GetComponentInChildren<MeshRenderer>();
+        for (int i = 0; i < blinkAmount; i++)
+        {
+            mr.enabled = isInvisible;
+            yield return new WaitForSeconds(blinkDelay);
+            mr.enabled = !isInvisible;
+            yield return new WaitForSeconds(blinkDelay);
+        }
+        
+        if (!isInvisible) yield break;
+
+        while (isInvisible)
+        {
+            yield return new WaitForSeconds(GetMoveDelay() * 3f);
+            for (int i = 0; i < 2; i++)
+            {
+                mr.enabled = isInvisible;
+                yield return new WaitForSeconds(blinkDelay);
+                mr.enabled = !isInvisible;
+                yield return new WaitForSeconds(blinkDelay);
+            }
+        }
     }
 }

@@ -20,11 +20,11 @@ public class HUD : GenericSingletonClass<HUD>
     [SerializeField] private Transform difficultyContainer;
     [SerializeField] private GameObject difficultyStar;
 
-    public Action onWinPadAchieve;
+    public Action onLevelChange;
     
     private void Start()
     {
-        GetComponent<Canvas>().worldCamera = Camera.main;
+        GetComponent<Canvas>().worldCamera = GameManager.Instance.cam;
         
         SetLevelInfos();
         SetDifficultyStars();
@@ -35,6 +35,8 @@ public class HUD : GenericSingletonClass<HUD>
         GameManager.Instance.onGameEnd += () => animator.Play("HUDHide");
         
         GameManager.Instance.onGameWin += () => animator.Play("HUDHide");
+        
+        onLevelChange += () => animator.CrossFade("HUDHide", 1f);
 
         levelNext.onClick.AddListener(()=>
         {

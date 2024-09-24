@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Grid
-  m_Shader: {fileID: -6465566751694194690, guid: 2b10a9b4f2ffac54eb4ceef4e32143ac,
+  m_Name: M_PadVision
+  m_Shader: {fileID: -6465566751694194690, guid: cd779dce7af001f45809752c44a1aa78,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -81,6 +81,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Triplanar_576b639f95e1470a93d3b810937db77b_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: aabed95a1f753a8459511bad546019a1, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -118,20 +122,20 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DotBoost: 0.6
+    - _DotBoost: 0
     - _DotReduce: 0.2
-    - _DotSize: 0.8
+    - _DotSize: 0.6
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FrequencyLines: 0.5
+    - _FrequencyLines: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _GridSize: 1
     - _GridThickness: 0.2
-    - _GridVisibility: 0.2
-    - _LinesBoost: 0.1
+    - _GridVisibility: 0
+    - _LinesBoost: 0.2
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _OffsetLines: 0
@@ -139,7 +143,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _ShadowIntensityTreshold: 0
+    - _ShadowIntensityTreshold: 0.05
     - _Size: 0.8
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
@@ -150,16 +154,16 @@ Material:
     - _Surface: 0
     - _ThicknessLines: 0.2
     - _Tile: 8
-    - _TileDot: 8
+    - _TileDot: 20
     - _WorkflowMode: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0, g: 0.48627424, b: 1, a: 1}
-    - _Color: {r: 0, g: 0.48627424, b: 1, a: 1}
-    - _Color_1: {r: 0, g: 0.3715956, b: 1, a: 1}
-    - _Color_2: {r: 0, g: 0.37617442, b: 0.7735849, a: 1}
+    - _BaseColor: {r: 1, g: 0.7861774, b: 0.15686274, a: 1}
+    - _Color: {r: 0, g: 0.3432126, b: 1, a: 1}
+    - _Color_1: {r: 1, g: 0.68155754, b: 0.2688679, a: 0}
+    - _Color_2: {r: 1, g: 0.5137255, b: 0, a: 1}
     - _DotTiling: {r: 1, g: 1, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GridColor: {r: 0.15566039, g: 0.44966274, b: 1, a: 0}
+    - _GridColor: {r: 1, g: 0.62661314, b: 0.15686274, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
