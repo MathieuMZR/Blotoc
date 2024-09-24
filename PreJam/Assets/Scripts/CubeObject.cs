@@ -58,6 +58,7 @@ public class CubeObject : MonoBehaviour
             Instantiate(psDestroy, transform.position, Quaternion.identity);
             
             GameManager.Instance.EndGame();
+            GameManager.Instance.CenterOnImpactDeath(other.transform, 5f);
 
             var cam = GameManager.Instance.cam;
             cam.transform.DOKill();

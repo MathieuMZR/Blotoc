@@ -13,6 +13,7 @@ public class GameManager : GenericSingletonClass<GameManager>
     public int tileSize = 10;
 
     public Camera cam;
+    [SerializeField] private AnimationCurve winLevelCurve;
 
     public int winCube;
     public CubeObject lastCube;
@@ -27,12 +28,18 @@ public class GameManager : GenericSingletonClass<GameManager>
     {
         Time.timeScale = 1f;
         cam = Camera.main;
+        
+        var ortho = cam.orthographicSize;
+        cam.orthographicSize = ortho + 2f;
 
         VerifyLevelIndex();
     }
 
     private void StartGame()
     {
+        var ortho = cam.orthographicSize;
+        cam.DOOrthoSize(ortho - 2f, 1f);
+        
         onGameStart.Invoke();
     }
     
@@ -64,6 +71,8 @@ public class GameManager : GenericSingletonClass<GameManager>
     private void WinGame()
     {
         onGameWin.Invoke();
+
+        CenterOnImpactDeath(lastCube.transform, 1.5f);
     }
 
     void Update()
@@ -104,6 +113,23 @@ public class GameManager : GenericSingletonClass<GameManager>
         {
             if(t.canSwitch) t.Switch();
         }
+    }
+
+    public void CenterOnImpactDeath(Transform target, float orthoDivider, float duration = 1f)
+    {
+        var camTransform = cam.transform.root;
+        
+        // Get the camera's forward direction in world space
+        Vector3 cameraForward = camTransform.forward;
+
+        // Calculate the new camera position by moving it along its forward direction
+        Vector3 newPosition = target.position - cameraForward * cam.orthographicSize;
+        
+        // Apply the new position without changing the camera's rotation
+        cam.transform.root.DOMove(newPosition, duration).SetUpdate(true).SetEase(Ease.OutSine);
+
+        var ortho = cam.orthographicSize;
+        cam.DOOrthoSize(ortho / orthoDivider, duration).SetEase(Ease.OutSine);
     }
     
     private enum RotateMode

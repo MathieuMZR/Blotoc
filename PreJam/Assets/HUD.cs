@@ -24,7 +24,7 @@ public class HUD : GenericSingletonClass<HUD>
     
     private void Start()
     {
-        GetComponent<Canvas>().worldCamera = GameManager.Instance.cam;
+        GetComponent<Canvas>().worldCamera = Camera.main;
         
         SetLevelInfos();
         SetDifficultyStars();

@@ -74,6 +74,7 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
     
     void SetImagePosition(Vector3 worldPos)
     {
+        return;
         var mainCamera = GameManager.Instance.cam;
         
         // Convert the world position to screen position in camera space

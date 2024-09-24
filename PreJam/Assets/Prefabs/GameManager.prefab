@@ -44,5 +44,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3cd6ac6d72945045b61fe5220267fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  level:
+    name: 
+    difficulty: 1
   tileSize: 1
+  cam: {fileID: 0}
+  winLevelCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.22296658
+      value: 0.07997763
+      inSlope: -0.017368201
+      outSlope: -0.017368201
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.51965344
+      value: 0.0091060065
+      inSlope: 0.1695412
+      outSlope: 0.1695412
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1228653
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   winCube: 0
+  lastCube: {fileID: 0}
