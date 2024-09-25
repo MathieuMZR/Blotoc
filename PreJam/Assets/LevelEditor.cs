@@ -287,8 +287,9 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         }
 
         var v3 = SnapToGrid(outValue, 1f);
+        var noYV3 = new Vector3(v3.x, 0, v3.z);
         
-        return (v3, hit);
+        return (noYV3, hit);
     }
 
     private Vector3 SnapToGrid(Vector3 pos, float gridSize)

@@ -1514,7 +1514,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  offsetGroupHide: {x: 0, y: -180}
+  offsetGroupHide: {x: 0, y: -190}
   go:
   - {fileID: 2002989890684353741, guid: 143a9f037afcf1b43929bcc71847375d, type: 3}
   - {fileID: 2002989890684353741, guid: 7c3ddc933b68bc94284c328d9860f107, type: 3}
