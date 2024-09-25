@@ -5,6 +5,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class LevelEditor : GenericSingletonClass<LevelEditor>
@@ -13,25 +14,56 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
     public int currentSelectedObject;
     
     [SerializeField] private LevelEditorObject[] availableObjects;
-    [SerializeField] private Transform objectsGroupCanvas;
+    [SerializeField] private RectTransform objectsGroup;
+    [SerializeField] private RectTransform objectsGroupParent;
 
+    [SerializeField] private float placeDeleteAnimDuration = 0.25f;
     [SerializeField] private AnimationCurve placeCurve;
     [SerializeField] private AnimationCurve deleteCurve;
+
+    [SerializeField] private Vector2 offsetGroupHide;
+
+    private Vector2 _basePosGroup;
+    private bool _isGroupVisible = true;
+
+    private bool[,] grid;
     
     private Button[] _objectButtons;
     private GameObject _objectPreview;
     
     void Start()
     {
+        SetupGrid();
         SetEditorState(true);
             
         SetupAllObjectButtonsInEditor();
+
+        _basePosGroup = objectsGroupParent.anchoredPosition;
+        ShowHideGroup();
     }
     
     private void Update()
     {
+        ManageObjectPreviewVisibility();
         ManageObjectPreviewPosition();
         VerifyPlacement();
+        
+        if(Input.GetKeyDown(KeyCode.X)) Unselect();
+    }
+
+    private void SetupGrid()
+    {
+        var sizeX = 50;
+        var sizeY = 50;
+        int beginX = (int)(-sizeX / 2f);
+        int beginY = (int)(-sizeY / 2f);
+        
+        grid = new bool[sizeX, sizeY];
+    }
+
+    private void SetGridValue(bool value, int posX, int posY)
+    {
+        grid[posX, posY] = value;
     }
 
     public void SetEditorState(bool state)
@@ -42,7 +74,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
     
     void SetupAllObjectButtonsInEditor()
     {
-        _objectButtons = objectsGroupCanvas.GetComponentsInChildren<Button>();
+        _objectButtons = objectsGroup.GetComponentsInChildren<Button>();
         
         foreach (var b in _objectButtons)
         {
@@ -58,6 +90,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
             }
             
             b.GetComponentInChildren<TextMeshProUGUI>().text = finalString;
+            b.transform.GetChild(1).GetComponent<Image>().sprite = GetCurrentObjectIndex(index).sprite;
         }
     }
 
@@ -76,10 +109,13 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
     void CreateObjectPreview()
     {
         DestroyObjectPreview();
+        
         if (_objectPreview == GetCurrentSelectedObject().obj) return;
         if (GetCurrentSelectedObject() is null) return;
         
         _objectPreview = Instantiate(GetCurrentSelectedObject().obj, GetWorldMousePosition().Item1, Quaternion.identity);
+        var cols = _objectPreview.GetComponents<Collider>();
+        foreach (var c in cols) c.enabled = false;
     }
 
     void DestroyObjectPreview()
@@ -101,12 +137,21 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         }
     }
 
+    void ManageObjectPreviewVisibility()
+    {
+        bool condition = EventSystem.current.IsPointerOverGameObject();
+        if(_objectPreview) _objectPreview.SetActive(!condition);
+    }
+
     void VerifyPlacement()
     {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             var col = GetWorldMousePosition().Item2.collider;
-            if (col.gameObject != _objectPreview && col.CompareTag("PlacedObjects"))
+            var point = GetWorldMousePosition().Item2.point;
+
+            //Modify object when no item selected
+            if (currentSelectedObject == -1 && GetGridValue(point))
             {
                 col.TryGetComponent(out ILevelEditorModify lvl);
                 if (lvl is not null && _objectPreview == null)
@@ -115,28 +160,56 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
                 }
                 return;
             }
-            
+
             if (GetCurrentObjectIndex(currentSelectedObject) is null) return;
             if (GetCurrentSelectedObject() is null) return;
+            if (GetGridValue(point)) return;
             
-            var obj = Instantiate(GetCurrentObjectIndex(currentSelectedObject).obj,
-                SnapToGrid(GetWorldMousePosition().Item1, GetCurrentSelectedObject().offsetInWorld, 1f),
-                Quaternion.identity);
-            obj.transform.localScale = Vector3.zero;
-            obj.transform.DOScale(Vector3.one, 0.2f).SetEase(placeCurve);
+            var pos = SnapToGrid(GetWorldMousePosition().Item1, GetCurrentSelectedObject().offsetInWorld, 1f);
+            var obj = Instantiate(GetCurrentObjectIndex(currentSelectedObject).obj, pos, Quaternion.identity);
+            obj.name = "PLACED";
+            
+            SetGridValue(true, (int)pos.x, (int)pos.z);
+            
+            PlaceObjectAnimation(obj);
         }
 
         if (Input.GetMouseButtonDown(1) && !EventSystem.current.IsPointerOverGameObject() && _objectPreview == null)
         {
             var col = GetWorldMousePosition().Item2.collider;
-            if (col.CompareTag("PlacedObjects"))
+            var point = GetWorldMousePosition().Item2.point;
+
+            if (col.name == "Plane") return;
+            
+            if (GetGridValue(point))
             {
-                col.transform.DOScale(Vector3.one, 0.2f).SetEase(deleteCurve).OnComplete(() =>
+                col.transform.DOScale(Vector3.zero, placeDeleteAnimDuration / 2f).SetEase(deleteCurve).OnComplete(() =>
                 {
                     Destroy(col.gameObject);
                 });
             }
         }
+    }
+
+    void PlaceObjectAnimation(GameObject obj)
+    {
+        return;
+        var pos = obj.transform.position;
+        obj.transform.position = pos + Vector3.up * 20f;
+        obj.transform.DOMove(pos, placeDeleteAnimDuration).SetEase(placeCurve);
+    }
+
+    public void SetGroupVisibility()
+    {
+        _isGroupVisible = !_isGroupVisible;
+        ShowHideGroup();
+    }
+    
+    void ShowHideGroup()
+    {
+        objectsGroupParent.DOKill();
+        var offset = _basePosGroup + (!_isGroupVisible ? offsetGroupHide : Vector2.zero);
+        objectsGroupParent.DOAnchorPos(offset, 0.25f).SetEase(Ease.OutSine);
     }
 
     //--------------------------- UTILITIES --------------------------------
@@ -153,7 +226,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         return availableObjects[index];
     }
 
-    (Vector3, RaycastHit) GetWorldMousePosition()
+    (Vector3, RaycastHit, Vector2Int) GetWorldMousePosition()
     {
         Vector3 outValue = Vector3.zero;
         Vector3 mousePos = Input.mousePosition;
@@ -165,7 +238,8 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
             outValue = hit.point;
         }
 
-        return (new Vector3(outValue.x, 0, outValue.z), hit);
+        var v = new Vector2Int((int)(outValue.x),(int)(outValue.z));
+        return (new Vector3(outValue.x, 0, outValue.z), hit, v);
     }
 
     private Vector3 SnapToGrid(Vector3 pos, Vector3 offset, float gridSize)
@@ -209,6 +283,12 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
 
         return words.ToArray();
     }
+
+    bool GetGridValue(Vector3 point)
+    {
+        var pos = SnapToGrid(point, Vector3.zero, 1f);
+        return grid[(int)pos.x, (int)pos.z];
+    }
 }
 
 [Serializable]
@@ -216,4 +296,5 @@ public class LevelEditorObject
 {
     public GameObject obj;
     public Vector3 offsetInWorld;
+    public Sprite sprite;
 }
