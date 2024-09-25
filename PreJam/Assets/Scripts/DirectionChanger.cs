@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class DirectionChanger : MonoBehaviour
+public class DirectionChanger : MonoBehaviour, ILevelEditorModify
 {
     public Vector3 direction;
     
@@ -81,6 +81,15 @@ public class DirectionChanger : MonoBehaviour
         
         directionIndicatorPad.material.DOKill();
         directionIndicatorPad.material.DOColor(directionIndicatorPadColors[index], duration).SetEase(Ease.InOutSine);
+    }
+    
+    public void ModifyFromLevelEditor()
+    {
+        Vector3 v = Quaternion.AngleAxis(90f, Vector3.up) * direction;
+        direction = v;
+        
+        SetRotation();
+        SetColorFromDirection();
     }
 
     #if UNITY_EDITOR

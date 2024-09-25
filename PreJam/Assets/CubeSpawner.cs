@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
-public class CubeSpawner : MonoBehaviour
+public class CubeSpawner : MonoBehaviour, ILevelEditorModify
 {
     public Vector3 direction;
     [SerializeField] private CubeObject cube;
@@ -26,6 +26,12 @@ public class CubeSpawner : MonoBehaviour
     {
         var c = Instantiate(cube, transform.position, Quaternion.identity);
         c.SetNewDirection(direction);
+    }
+    
+    public void ModifyFromLevelEditor()
+    {
+        Vector3 v = Quaternion.AngleAxis(90f, Vector3.up) * direction;
+        direction = v;
     }
 
 #if UNITY_EDITOR

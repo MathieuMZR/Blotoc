@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 9000467398518732561}
   m_Layer: 0
   m_Name: NoVisionPad
-  m_TagString: Untagged
+  m_TagString: PlacedObjects
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,8 +81,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shouldReveal: 0
-  blinkAmount: 5
-  blinkDelay: 0.05
 --- !u!114 &8682628292497091039
 MonoBehaviour:
   m_ObjectHideFlags: 0

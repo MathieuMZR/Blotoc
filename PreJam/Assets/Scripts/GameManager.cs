@@ -82,6 +82,7 @@ public class GameManager : GenericSingletonClass<GameManager>
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _isWaitingGameToStart = false;
+                if(IsInEditor()) LevelEditor.Instance.SetEditorState(false);
                 StartGame();
             }
         }
@@ -98,6 +99,8 @@ public class GameManager : GenericSingletonClass<GameManager>
 
     void InputAction(RotateMode mode)
     {
+        if (IsInEditor()) return;
+        
         cam.transform.DOKill();
         cam.DOShakePosition(.35f, .025f, 100).SetEase(Ease.OutSine);
         
@@ -131,6 +134,8 @@ public class GameManager : GenericSingletonClass<GameManager>
         var ortho = cam.orthographicSize;
         cam.DOOrthoSize(ortho / orthoDivider, duration).SetEase(Ease.OutSine);
     }
+
+    private bool IsInEditor() => LevelEditor.Instance && LevelEditor.Instance.isInEditor;
     
     private enum RotateMode
     {
