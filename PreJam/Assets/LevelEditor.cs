@@ -17,6 +17,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
     [SerializeField] private LevelEditorObject[] availableObjects;
     [SerializeField] private RectTransform objectsGroup;
     [SerializeField] private RectTransform objectsGroupParent;
+    [SerializeField] private GameObject psAddObject;
 
     [SerializeField] private float placeDeleteAnimDuration = 0.25f;
     [SerializeField] private AnimationCurve placeCurve;
@@ -34,6 +35,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
     
     private Button[] _objectButtons;
     private GameObject _objectPreview;
+    private Button _lastSelectedButton;
     
     void Start()
     {
@@ -102,7 +104,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         foreach (var b in _objectButtons)
         {
             var index = b.transform.GetSiblingIndex();
-            b.onClick.AddListener(() => SelectObject(index));
+            b.onClick.AddListener(() => SelectObject(index, b));
             
             //Temporary
             string[] sArray = SplitString(GetCurrentObjectIndex(index).obj.name);
@@ -119,16 +121,31 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         }
     }
 
-    void SelectObject(int index)
+    void SelectObject(int index, Button b)
     {
         currentSelectedObject = index;
         CreateObjectPreview();
+
+        _lastSelectedButton = b;
+        
+        foreach (var ui in FindObjectsOfType<UIEditorLevelItem>())
+        {
+            if (ui == b.GetComponent<UIEditorLevelItem>()) continue;
+            ui.Deselect();
+        }
+
+        b.GetComponent<UIEditorLevelItem>().isSelected = true;
     }
     
     public void Unselect()
     {
         currentSelectedObject = -1;
         DestroyObjectPreview();
+
+        _lastSelectedButton.GetComponent<UIEditorLevelItem>().isSelected = false;
+        _lastSelectedButton.GetComponent<UIEditorLevelItem>().Deselect();
+        
+        _lastSelectedButton = null;
     }
     
     void CreateObjectPreview()
@@ -157,7 +174,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         if (_objectPreview is not null)
         {
             _objectPreview.transform.position = Vector3.Lerp(_objectPreview.transform.position, 
-                GetWorldMousePosition(GetCurrentSelectedObject().offsetInWorld.y).Item1, Time.deltaTime * 50f);
+                GetWorldMousePosition().Item1, Time.deltaTime * 50f);
         }
     }
 
@@ -189,9 +206,11 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
             if (GetCurrentSelectedObject() is null) return;
             if (GetGridValue(point)) return;
 
-            var pos = GetWorldMousePosition(GetCurrentSelectedObject().offsetInWorld.y).Item1;
+            var pos = GetWorldMousePosition().Item1;
             var obj = Instantiate(GetCurrentObjectIndex(currentSelectedObject).obj, pos, Quaternion.identity);
             obj.name = "PLACED";
+
+            Instantiate(psAddObject, pos, Quaternion.identity);
             
             RefreshGridValue(true, (int)pos.x, (int)pos.z);
             
@@ -254,7 +273,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         return availableObjects[index];
     }
 
-    (Vector3, RaycastHit) GetWorldMousePosition(float offsetY = 0)
+    (Vector3, RaycastHit) GetWorldMousePosition()
     {
         Vector3 outValue = Vector3.zero;
         Vector3 mousePos = Input.mousePosition;
@@ -267,12 +286,12 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
             outValue = hit.point;
         }
 
-        var v3 = SnapToGrid(outValue, new Vector3(0, offsetY, 0), 1f);
+        var v3 = SnapToGrid(outValue, 1f);
         
         return (v3, hit);
     }
 
-    private Vector3 SnapToGrid(Vector3 pos, Vector3 offset, float gridSize)
+    private Vector3 SnapToGrid(Vector3 pos, float gridSize)
     {
         Vector3 position = pos;
 
@@ -282,7 +301,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         float snappedZ = Mathf.Round(position.z / gridSize) * gridSize;
 
         // Set the object's position to the snapped position
-        return new Vector3((int)snappedX, snappedY + offset.y, (int)snappedZ);
+        return new Vector3((int)snappedX, (int)snappedY, (int)snappedZ);
     }
 
     string[] SplitString(string inputString)
@@ -316,7 +335,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
 
     bool GetGridValue(Vector3 point)
     {
-        var pos = SnapToGrid(point, Vector3.zero, 1f);
+        var pos = SnapToGrid(point, 1f);
         return grid[(int)pos.x, (int)pos.z];
     }
 }
@@ -325,7 +344,6 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
 public class LevelEditorObject
 {
     public GameObject obj;
-    public Vector3 offsetInWorld;
     public Sprite sprite;
     public Color colorUI;
 }

@@ -24,7 +24,7 @@ public class CubeSpawner : MonoBehaviour, ILevelEditorModify
 
     private void SpawnCube()
     {
-        var c = Instantiate(cube, transform.position, Quaternion.identity);
+        var c = Instantiate(cube, transform.position + new Vector3(0, -1, 0), Quaternion.identity);
         c.SetNewDirection(direction);
     }
     
