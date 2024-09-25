@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -20,8 +21,11 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
     [SerializeField] private float placeDeleteAnimDuration = 0.25f;
     [SerializeField] private AnimationCurve placeCurve;
     [SerializeField] private AnimationCurve deleteCurve;
+    [SerializeField] private AnimationCurve groupCurve;
 
     [SerializeField] private Vector2 offsetGroupHide;
+    [SerializeField] private GameObject[] go;
+    [SerializeField] private Transform p;
 
     private Vector2 _basePosGroup;
     private bool _isGroupVisible = true;
@@ -40,6 +44,8 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
 
         _basePosGroup = objectsGroupParent.anchoredPosition;
         ShowHideGroup();
+
+        GridDebug();
     }
     
     private void Update()
@@ -50,20 +56,37 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         
         if(Input.GetKeyDown(KeyCode.X)) Unselect();
     }
+    
+    private void GridDebug()
+    {
+        return;
+        
+        foreach (Transform t in p)
+        {
+            if(t != p) Destroy(t.gameObject);
+        }
+
+        for (int x = 0; x < 50; x++)
+        {
+            for (int y = 0; y < 50; y++)
+            {
+                Instantiate(GetGridValue(new Vector3(x, 0, y)) ? go[0] : go[1], new Vector3(x, 0, y), Quaternion.identity, p);
+            }
+        }
+    }
 
     private void SetupGrid()
     {
         var sizeX = 50;
         var sizeY = 50;
-        int beginX = (int)(-sizeX / 2f);
-        int beginY = (int)(-sizeY / 2f);
-        
         grid = new bool[sizeX, sizeY];
     }
 
-    private void SetGridValue(bool value, int posX, int posY)
+    private void RefreshGridValue(bool value, int posX, int posY)
     {
         grid[posX, posY] = value;
+        
+        GridDebug();
     }
 
     public void SetEditorState(bool state)
@@ -88,9 +111,11 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
             {
                 finalString += s + " ";
             }
-            
-            b.GetComponentInChildren<TextMeshProUGUI>().text = finalString;
-            b.transform.GetChild(1).GetComponent<Image>().sprite = GetCurrentObjectIndex(index).sprite;
+
+            var c = b.GetComponent<UIEditorLevelItem>();
+            c.SetImage(GetCurrentObjectIndex(index).sprite);
+            c.SetText(finalString);
+            c.SetColor(GetCurrentObjectIndex(index).colorUI);
         }
     }
 
@@ -132,8 +157,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         if (_objectPreview is not null)
         {
             _objectPreview.transform.position = Vector3.Lerp(_objectPreview.transform.position, 
-                SnapToGrid(GetWorldMousePosition().Item1, GetCurrentSelectedObject().offsetInWorld, 1f),
-                Time.deltaTime * 50f);
+                GetWorldMousePosition(GetCurrentSelectedObject().offsetInWorld.y).Item1, Time.deltaTime * 50f);
         }
     }
 
@@ -148,7 +172,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             var col = GetWorldMousePosition().Item2.collider;
-            var point = GetWorldMousePosition().Item2.point;
+            var point = GetWorldMousePosition().Item1;
 
             //Modify object when no item selected
             if (currentSelectedObject == -1 && GetGridValue(point))
@@ -164,26 +188,30 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
             if (GetCurrentObjectIndex(currentSelectedObject) is null) return;
             if (GetCurrentSelectedObject() is null) return;
             if (GetGridValue(point)) return;
-            
-            var pos = SnapToGrid(GetWorldMousePosition().Item1, GetCurrentSelectedObject().offsetInWorld, 1f);
+
+            var pos = GetWorldMousePosition(GetCurrentSelectedObject().offsetInWorld.y).Item1;
             var obj = Instantiate(GetCurrentObjectIndex(currentSelectedObject).obj, pos, Quaternion.identity);
             obj.name = "PLACED";
             
-            SetGridValue(true, (int)pos.x, (int)pos.z);
+            RefreshGridValue(true, (int)pos.x, (int)pos.z);
             
             PlaceObjectAnimation(obj);
         }
 
-        if (Input.GetMouseButtonDown(1) && !EventSystem.current.IsPointerOverGameObject() && _objectPreview == null)
+        if (Input.GetMouseButtonDown(1) && !EventSystem.current.IsPointerOverGameObject())
         {
             var col = GetWorldMousePosition().Item2.collider;
-            var point = GetWorldMousePosition().Item2.point;
+            var point = GetWorldMousePosition().Item1;
 
-            if (col.name == "Plane") return;
-            
+            if (col.gameObject.layer == LayerMask.NameToLayer("Ground")) return;
+
             if (GetGridValue(point))
             {
-                col.transform.DOScale(Vector3.zero, placeDeleteAnimDuration / 2f).SetEase(deleteCurve).OnComplete(() =>
+                Ray ray = GameManager.Instance.cam.ScreenPointToRay(Input.mousePosition);
+                Debug.DrawRay(ray.origin, ray.direction * 500f, Color.red, 100f);
+                
+                RefreshGridValue(false, (int)point.x, (int)point.z);
+                col.transform.DOScale(new Vector3(0,1,0), placeDeleteAnimDuration / 2f).SetEase(deleteCurve).OnComplete(() =>
                 {
                     Destroy(col.gameObject);
                 });
@@ -209,7 +237,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
     {
         objectsGroupParent.DOKill();
         var offset = _basePosGroup + (!_isGroupVisible ? offsetGroupHide : Vector2.zero);
-        objectsGroupParent.DOAnchorPos(offset, 0.25f).SetEase(Ease.OutSine);
+        objectsGroupParent.DOAnchorPos(offset, 0.25f).SetEase(groupCurve);
     }
 
     //--------------------------- UTILITIES --------------------------------
@@ -226,20 +254,22 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         return availableObjects[index];
     }
 
-    (Vector3, RaycastHit, Vector2Int) GetWorldMousePosition()
+    (Vector3, RaycastHit) GetWorldMousePosition(float offsetY = 0)
     {
         Vector3 outValue = Vector3.zero;
         Vector3 mousePos = Input.mousePosition;
+        
         Ray ray = GameManager.Instance.cam.ScreenPointToRay(mousePos);
 
         // Perform the raycast
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit, 500f))
         {
             outValue = hit.point;
         }
 
-        var v = new Vector2Int((int)(outValue.x),(int)(outValue.z));
-        return (new Vector3(outValue.x, 0, outValue.z), hit, v);
+        var v3 = SnapToGrid(outValue, new Vector3(0, offsetY, 0), 1f);
+        
+        return (v3, hit);
     }
 
     private Vector3 SnapToGrid(Vector3 pos, Vector3 offset, float gridSize)
@@ -252,7 +282,7 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         float snappedZ = Mathf.Round(position.z / gridSize) * gridSize;
 
         // Set the object's position to the snapped position
-        return new Vector3(snappedX + offset.x, snappedY + offset.y, snappedZ + offset.z);
+        return new Vector3((int)snappedX, snappedY + offset.y, (int)snappedZ);
     }
 
     string[] SplitString(string inputString)
@@ -297,4 +327,5 @@ public class LevelEditorObject
     public GameObject obj;
     public Vector3 offsetInWorld;
     public Sprite sprite;
+    public Color colorUI;
 }
