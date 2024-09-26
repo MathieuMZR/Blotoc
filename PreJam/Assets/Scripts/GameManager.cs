@@ -36,7 +36,7 @@ public class GameManager : GenericSingletonClass<GameManager>
         
         foreach (SwitchBloc sw in FindObjectsOfType<SwitchBloc>())
         {
-            sw.EnableColliderEditor(true);
+            sw.EnableColliderEditor(false);
         }
     }
 
@@ -53,6 +53,11 @@ public class GameManager : GenericSingletonClass<GameManager>
         onGameEnd.Invoke();
 
         DOTween.To(()=> Time.timeScale, x => Time.timeScale = x, 0f, 1f).SetUpdate(true);
+        
+        foreach (SwitchBloc sw in FindObjectsOfType<SwitchBloc>())
+        {
+            sw.EnableColliderEditor(true);
+        }
     }
 
     public void VerifyGame(CubeObject cube)
@@ -70,7 +75,7 @@ public class GameManager : GenericSingletonClass<GameManager>
     private void VerifyLevelIndex()
     {
         HUD.Instance.DisableLevelButton(0, SceneManager.GetActiveScene().buildIndex == 0);
-        HUD.Instance.DisableLevelButton(1, SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings - 2);
+        HUD.Instance.DisableLevelButton(1, SceneManager.GetActiveScene().buildIndex == 10);
     }
 
     private void WinGame()
