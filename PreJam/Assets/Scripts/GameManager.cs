@@ -30,7 +30,7 @@ public class GameManager : GenericSingletonClass<GameManager>
         cam = Camera.main;
         
         var ortho = cam.orthographicSize;
-        cam.orthographicSize = ortho + 2f;
+        cam.orthographicSize = ortho * 1.5f;
 
         VerifyLevelIndex();
     }
@@ -38,7 +38,7 @@ public class GameManager : GenericSingletonClass<GameManager>
     private void StartGame()
     {
         var ortho = cam.orthographicSize;
-        cam.DOOrthoSize(ortho - 2f, 1f);
+        cam.DOOrthoSize(ortho / 1.5f, 1f);
         
         onGameStart.Invoke();
     }
@@ -65,7 +65,7 @@ public class GameManager : GenericSingletonClass<GameManager>
     private void VerifyLevelIndex()
     {
         HUD.Instance.DisableLevelButton(0, SceneManager.GetActiveScene().buildIndex == 0);
-        HUD.Instance.DisableLevelButton(1, SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings);
+        HUD.Instance.DisableLevelButton(1, SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings - 2);
     }
 
     private void WinGame()
@@ -120,19 +120,23 @@ public class GameManager : GenericSingletonClass<GameManager>
 
     public void CenterOnImpactDeath(Transform target, float orthoDivider, float duration = 1f)
     {
-        var camTransform = cam.transform.root;
-        
-        // Get the camera's forward direction in world space
-        Vector3 cameraForward = camTransform.forward;
+        // Get the parent transform of the camera
+        Transform parentTransform = cam.transform.parent;
 
-        // Calculate the new camera position by moving it along its forward direction
-        Vector3 newPosition = target.position - cameraForward * cam.orthographicSize;
-        
-        // Apply the new position without changing the camera's rotation
-        cam.transform.root.DOMove(newPosition, duration).SetUpdate(true).SetEase(Ease.OutSine);
+        // Keep the parent's current rotation (55, 45, 0), we won't change that
 
-        var ortho = cam.orthographicSize;
-        cam.DOOrthoSize(ortho / orthoDivider, duration).SetEase(Ease.OutSine);
+        // Calculate the offset from the target position to the parent's current position
+        Vector3 offset = parentTransform.position - cam.transform.position;
+
+        // Set the new position for the parent, which centers on the target
+        Vector3 newPosition = target.position + offset;
+
+        // Move the parent to the new position smoothly
+        parentTransform.DOMove(newPosition, duration).SetUpdate(true).SetEase(Ease.OutSine);
+
+        // Adjust the orthographic size of the camera smoothly
+        float currentOrtho = cam.orthographicSize;
+        cam.DOOrthoSize(currentOrtho / orthoDivider, duration).SetEase(Ease.OutSine);
     }
 
     private bool IsInEditor() => LevelEditor.Instance && LevelEditor.Instance.isInEditor;

@@ -760,6 +760,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: CameraManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2317452609004354647, guid: f7f02fe0d1a31254a8349a24d425eb4b,
+        type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2317452609004354647, guid: f7f02fe0d1a31254a8349a24d425eb4b,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2317452609004354647, guid: f7f02fe0d1a31254a8349a24d425eb4b,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2317452609004354647, guid: f7f02fe0d1a31254a8349a24d425eb4b,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3365800733905083962, guid: f7f02fe0d1a31254a8349a24d425eb4b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1571,7 +1591,7 @@ PrefabInstance:
     - target: {fileID: 1948977759779311235, guid: 8f9aa88b00ba2824d98a07a5ee3b3424,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -737.1864
+      value: -734.1864
       objectReference: {fileID: 0}
     - target: {fileID: 1948977759779311235, guid: 8f9aa88b00ba2824d98a07a5ee3b3424,
         type: 3}
@@ -2100,7 +2120,7 @@ PrefabInstance:
     - target: {fileID: 5060436721273709905, guid: 950753d442c583c47a476e0737d5b09f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -510.9531
+      value: -509.9541
       objectReference: {fileID: 0}
     - target: {fileID: 5060436721273709905, guid: 950753d442c583c47a476e0737d5b09f,
         type: 3}

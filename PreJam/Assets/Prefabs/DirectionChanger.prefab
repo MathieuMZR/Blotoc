@@ -84,6 +84,7 @@ MonoBehaviour:
   direction: {x: 1, y: 0, z: 0}
   canMove: 1
   directionIndicator: {fileID: 3053855511158046539}
+  mat: {fileID: 2100000, guid: 782e81c22b388c643a55e6a0a43cb39e, type: 2}
   directionIndicatorPad: {fileID: 2781221163876208706}
   directionIndicatorPadColors:
   - serializedVersion: 2

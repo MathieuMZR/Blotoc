@@ -18,6 +18,8 @@ public class CubeObject : MonoBehaviour
     [SerializeField] private Transform pivot;
     [SerializeField] private ParticleSystem psDestroy;
 
+    public bool prePlaced;
+
     private Collider _col;
 
     private void Awake()
@@ -28,21 +30,29 @@ public class CubeObject : MonoBehaviour
     private void Start()
     {
         CollisionManaging(false);
-        SpawnAnimation();
+        Spawn();
     }
 
-    void SpawnAnimation()
+    void Spawn()
     {
-        var basePos = transform.position += Vector3.up;
-        transform.position -= new Vector3(0, 2, 0);
-        transform.DOMove(basePos, 1f).SetEase(Ease.OutQuart);
-        
-        transform.localScale = Vector3.zero;
-        transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutQuart).OnComplete(() =>
+        if (!prePlaced)
+        {
+            var basePos = transform.position += Vector3.up;
+            transform.position -= new Vector3(0, 2, 0);
+            transform.DOMove(basePos, 1f).SetEase(Ease.OutQuart);
+
+            transform.localScale = Vector3.zero;
+            transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutQuart).OnComplete(() =>
+            {
+                CollisionManaging(true);
+                StartCoroutine(CubeMove());
+            });
+        }
+        else
         {
             CollisionManaging(true);
             StartCoroutine(CubeMove());
-        });
+        }
     }
 
     public void CollisionManaging(bool enable)
@@ -58,7 +68,7 @@ public class CubeObject : MonoBehaviour
             Instantiate(psDestroy, transform.position, Quaternion.identity);
             
             GameManager.Instance.EndGame();
-            GameManager.Instance.CenterOnImpactDeath(other.transform, 5f);
+            GameManager.Instance.CenterOnImpactDeath(transform, 5f);
 
             var cam = GameManager.Instance.cam;
             cam.transform.DOKill();
@@ -71,7 +81,7 @@ public class CubeObject : MonoBehaviour
     public IEnumerator CubeMove()
     {
         var pos = transform.position;
-        var newPos = pos + direction * GameManager.Instance.tileSize;
+        var newPos = pos + direction * 1f;
         
         pivot.transform.rotation = Quaternion.identity;
         var rot = pivot.transform.rotation * GetAngleFromDirectionMoving();

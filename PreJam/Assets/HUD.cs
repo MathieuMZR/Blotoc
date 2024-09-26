@@ -70,7 +70,7 @@ public class HUD : GenericSingletonClass<HUD>
 
     public void SetLevelInfos()
     {
-        levelName.text = "Level " + (SceneManager.GetActiveScene().buildIndex + 1);
+        levelName.text = "Level " + (SceneManager.GetActiveScene().buildIndex);
         levelNameText.text = GameManager.Instance.level.name.ToUpper();
         
         int amountOfCube = FindObjectsOfType<CubeSpawner>().Length;

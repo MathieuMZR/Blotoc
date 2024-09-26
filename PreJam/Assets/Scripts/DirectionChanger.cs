@@ -12,13 +12,13 @@ public class DirectionChanger : MonoBehaviour, ILevelEditorModify
     
     [SerializeField] private bool canMove;
     [SerializeField] private GameObject directionIndicator;
+    [SerializeField] private Material mat;
     [SerializeField] private MeshRenderer directionIndicatorPad;
     [SerializeField] private Color32[] directionIndicatorPadColors;
     [SerializeField] private AnimationCurve rotateCurve;
 
     private void Start()
     {
-        var mat = directionIndicatorPad.material;
         directionIndicatorPad.material = Instantiate(mat);
 
         SetRotation();

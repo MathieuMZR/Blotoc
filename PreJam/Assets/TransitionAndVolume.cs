@@ -25,13 +25,15 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
         
         var mat = Instantiate(transImg.material);
         transImg.material = mat;
+
+        ShowLevel();
+        
+        if (!GameManager.Instance) return;
         
         GameManager.Instance.onGameEnd += () => StartCoroutine(nameof(RestartLevel));
         GameManager.Instance.onGameWin += () => StartCoroutine(nameof(WinLevel));
         GameManager.Instance.onGameEnd += Desaturate;
         GameManager.Instance.onGameEnd += FilmGrain;
-        
-        ShowLevel();
     }
 
     private void ShowLevel()
@@ -90,7 +92,16 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
         rectTransform.localPosition = localPos;
     }
     
-    // 217 71
+    public IEnumerator OpenLevel(int index)
+    {
+        if(HUD.Instance) HUD.Instance.onLevelChange.Invoke();
+        
+        transImg.material.DOFloat(1f, _transition, duration).SetEase(ease).SetUpdate(true);
+
+        yield return new WaitForSecondsRealtime(duration + 1f);
+        
+        SceneManager.LoadScene(index);
+    }
 
     public IEnumerator NextLevel()
     {
