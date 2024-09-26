@@ -16,6 +16,8 @@ public class SwitchBloc : MonoBehaviour
     
     [SerializeField] private MeshRenderer mr;
     [SerializeField] private ParticleSystem rotate;
+    
+    [SerializeField] private Collider editorCollider;
 
     private bool _switchState;
     private Collider _c;
@@ -31,6 +33,11 @@ public class SwitchBloc : MonoBehaviour
         _c.enabled = _switchState;
         
         mr.material.SetFloat("_Switch", _switchState ? 1 : 0);
+    }
+
+    public void EnableColliderEditor(bool enable)
+    {
+        editorCollider.enabled = enable;
     }
 
     public void Switch()

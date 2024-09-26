@@ -315,6 +315,7 @@ MonoBehaviour:
   animDuration: 0.35
   mr: {fileID: 2142717427590629450}
   rotate: {fileID: 8388092536246686912}
+  editorCollider: {fileID: 5272215676725861306}
 --- !u!114 &9010615239059721433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,7 +417,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1.2, y: 1.2, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}

@@ -33,6 +33,11 @@ public class GameManager : GenericSingletonClass<GameManager>
         cam.orthographicSize = ortho * 1.5f;
 
         VerifyLevelIndex();
+        
+        foreach (SwitchBloc sw in FindObjectsOfType<SwitchBloc>())
+        {
+            sw.EnableColliderEditor(true);
+        }
     }
 
     private void StartGame()
@@ -82,7 +87,14 @@ public class GameManager : GenericSingletonClass<GameManager>
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _isWaitingGameToStart = false;
-                if(IsInEditor()) LevelEditor.Instance.SetEditorState(false);
+                if (IsInEditor())
+                {
+                    LevelEditor.Instance.SetEditorState(false);
+                    foreach (SwitchBloc sw in FindObjectsOfType<SwitchBloc>())
+                    {
+                        sw.EnableColliderEditor(false);
+                    }
+                }
                 StartGame();
             }
         }
