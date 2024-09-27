@@ -47,6 +47,8 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
         _basePosGroup = objectsGroupParent.anchoredPosition;
         ShowHideGroup();
 
+        HUD.Instance.onLevelChange += SetGroupHidedTotally;
+
         GridDebug();
     }
     
@@ -250,6 +252,19 @@ public class LevelEditor : GenericSingletonClass<LevelEditor>
     {
         _isGroupVisible = !_isGroupVisible;
         ShowHideGroup();
+    }
+    
+    public void SetGroupVisibilityManual(bool visibility)
+    {
+        _isGroupVisible = visibility;
+        ShowHideGroup();
+    }
+    
+    public void SetGroupHidedTotally()
+    {
+        objectsGroupParent.DOKill();
+        var offset = _basePosGroup + new Vector2(0, offsetGroupHide.y * 2f);
+        objectsGroupParent.DOAnchorPos(offset, 0.25f).SetEase(groupCurve);
     }
     
     void ShowHideGroup()

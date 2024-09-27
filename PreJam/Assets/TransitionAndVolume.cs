@@ -36,7 +36,7 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
         GameManager.Instance.onGameEnd += FilmGrain;
     }
 
-    private void ShowLevel()
+    public void ShowLevel()
     {
         transImg.material.SetFloat(_transition, 1f);
         transImg.material.DOFloat(0f, _transition, duration).SetEase(ease).SetUpdate(true);

@@ -23,14 +23,30 @@ public class GameManager : GenericSingletonClass<GameManager>
     public Action onGameWin;
 
     private bool _isWaitingGameToStart = true;
+    
+    private float _orthoBase;
+    private Transform _camBaseTransform;
 
     private void Start()
     {
-        Time.timeScale = 1f;
         cam = Camera.main;
         
-        var ortho = cam.orthographicSize;
-        cam.orthographicSize = ortho * 1.5f;
+        _orthoBase = cam.orthographicSize;
+        _camBaseTransform = cam.transform;
+        
+        ResetGame();
+    }
+
+    void ResetGame()
+    {
+        Time.timeScale = 1f;
+
+        LevelEditor.Instance.SetEditorState(true);
+        LevelEditor.Instance.SetGroupVisibilityManual(false);
+        
+        cam.orthographicSize = _orthoBase * (IsInEditor() ? 1f : 1.5f);
+        cam.transform.position = _camBaseTransform.position;
+        cam.transform.rotation = _camBaseTransform.rotation;
 
         VerifyLevelIndex();
         
@@ -42,14 +58,21 @@ public class GameManager : GenericSingletonClass<GameManager>
 
     private void StartGame()
     {
-        var ortho = cam.orthographicSize;
-        cam.DOOrthoSize(ortho / 1.5f, 1f);
+        cam.DOOrthoSize(_orthoBase / 1.5f, 1f);
+        
+        LevelEditor.Instance.SetGroupVisibilityManual(false);
         
         onGameStart.Invoke();
     }
     
     public void EndGame()
     {
+        if (IsInSceneEditor())
+        {
+            Invoke(nameof(ResetGame), 2f);
+            return;
+        }
+        
         onGameEnd.Invoke();
 
         DOTween.To(()=> Time.timeScale, x => Time.timeScale = x, 0f, 1f).SetUpdate(true);
@@ -75,14 +98,20 @@ public class GameManager : GenericSingletonClass<GameManager>
     private void VerifyLevelIndex()
     {
         HUD.Instance.DisableLevelButton(0, SceneManager.GetActiveScene().buildIndex == 0);
-        HUD.Instance.DisableLevelButton(1, SceneManager.GetActiveScene().buildIndex == 10);
+        HUD.Instance.DisableLevelButton(1, SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings - 1);
     }
 
     private void WinGame()
     {
-        onGameWin.Invoke();
-
         CenterOnImpactDeath(lastCube.transform, 1.5f);
+        
+        if (IsInSceneEditor())
+        {
+            Invoke(nameof(ResetGame), 2f);
+            return;
+        }
+        
+        onGameWin.Invoke();
     }
 
     void Update()
@@ -153,10 +182,18 @@ public class GameManager : GenericSingletonClass<GameManager>
 
         // Adjust the orthographic size of the camera smoothly
         float currentOrtho = cam.orthographicSize;
-        cam.DOOrthoSize(currentOrtho / orthoDivider, duration).SetEase(Ease.OutSine);
+        cam.DOOrthoSize(currentOrtho / orthoDivider, duration).SetEase(Ease.OutSine).OnComplete(() =>
+        {
+            if (IsInSceneEditor())
+            {
+                ResetGame();
+                TransitionAndVolume.Instance.ShowLevel();
+            }
+        });
     }
 
-    private bool IsInEditor() => LevelEditor.Instance && LevelEditor.Instance.isInEditor;
+    public bool IsInEditor() => LevelEditor.Instance && LevelEditor.Instance.isInEditor;
+    public bool IsInSceneEditor() => LevelEditor.Instance && SceneManager.GetActiveScene().name == "EDITOR";
     
     private enum RotateMode
     {

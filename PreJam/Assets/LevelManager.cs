@@ -1,57 +1,42 @@
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
     [System.Serializable]
-    public class GameObjectData
-    {
-        public string prefabName;
-        public Vector3 position;
-        public Quaternion rotation;
-        public Vector3 scale;
-
-        // Add custom variables here
-        public string customData;
-    }
-
-    [System.Serializable]
     public class LevelData
     {
-        public List<GameObjectData> gameObjects = new List<GameObjectData>();
+        public List<GameObject> gameObjects = new List<GameObject>();
     }
 
-    public string saveFileName = "level.json";
-    public Transform parentForLoadedObjects;
+    public TMP_InputField saveFileNameInput;
 
     // Save level to JSON
     public void SaveLevel()
     {
         LevelData levelData = new LevelData();
-        foreach (Transform obj in transform)
+        foreach (GameObject obj in FindObjectsOfType<GameObject>())
         {
-            GameObjectData data = new GameObjectData
-            {
-                prefabName = obj.gameObject.name, // You can modify this to map prefab names
-                position = obj.position,
-                rotation = obj.rotation,
-                scale = obj.localScale,
-                customData = "Add any extra data here" // Custom data placeholder
-            };
-
-            levelData.gameObjects.Add(data);
+            levelData.gameObjects.Add(obj);
         }
 
         string json = JsonUtility.ToJson(levelData, true);
-        File.WriteAllText(Path.Combine(Application.persistentDataPath, saveFileName), json);
-        Debug.Log("Level saved to " + saveFileName);
+        File.WriteAllText(Path.Combine(Application.persistentDataPath, saveFileNameInput.text), json);
+        Debug.Log("Level saved to " + saveFileNameInput.text);
     }
 
     // Load level from JSON
     public void LoadLevel()
     {
-        string path = Path.Combine(Application.persistentDataPath, saveFileName);
+        foreach (GameObject obj in FindObjectsOfType<GameObject>())
+        {
+            if (obj.transform.parent != null) return;
+            Destroy(obj);
+        }
+        
+        string path = Path.Combine(Application.persistentDataPath, saveFileNameInput.text);
         if (!File.Exists(path)) return;
 
         string json = File.ReadAllText(path);
@@ -59,16 +44,10 @@ public class LevelManager : MonoBehaviour
 
         foreach (var data in levelData.gameObjects)
         {
-            GameObject prefab = Resources.Load<GameObject>(data.prefabName); // Ensure your prefabs are in a Resources folder
-            if (prefab == null) continue;
-
-            GameObject obj = Instantiate(prefab, data.position, data.rotation, parentForLoadedObjects);
-            obj.transform.localScale = data.scale;
-
-            // Load custom data if necessary
-            Debug.Log("Loaded object with custom data: " + data.customData);
+            GameObject obj = Instantiate(data, data.transform.position, data.transform.rotation);
+            obj.transform.localScale = data.transform.localScale;
         }
 
-        Debug.Log("Level loaded from " + saveFileName);
+        Debug.Log("Level loaded from " + saveFileNameInput.text);
     }
 }
