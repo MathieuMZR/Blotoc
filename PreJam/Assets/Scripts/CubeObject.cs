@@ -17,6 +17,7 @@ public class CubeObject : MonoBehaviour
     
     [SerializeField] private Transform pivot;
     [SerializeField] private ParticleSystem psDestroy;
+    [SerializeField] private ParticleSystem psWalk;
 
     public bool prePlaced;
 
@@ -68,11 +69,9 @@ public class CubeObject : MonoBehaviour
             Instantiate(psDestroy, transform.position, Quaternion.identity);
             
             GameManager.Instance.EndGame();
-            GameManager.Instance.CenterOnImpactDeath(transform, 5f);
-
-            var cam = GameManager.Instance.cam;
-            cam.transform.DOKill();
-            cam.DOShakePosition(.5f, .15f, 100).SetEase(Ease.OutSine);
+            
+            CameraManager.Instance.CenterOnImpactDeath(transform, 5f);
+            CameraManager.Instance.CameraShake(0.5f, 0.15f, 100);
             
             Destroy(gameObject);
         }
@@ -87,7 +86,11 @@ public class CubeObject : MonoBehaviour
         var rot = pivot.transform.rotation * GetAngleFromDirectionMoving();
 
         transform.DOMove(newPos, moveDuration / speedModifier).SetEase(moveCurve);
-        pivot.transform.DORotateQuaternion(rot, moveDuration / speedModifier).SetEase(rotateCurve);
+        pivot.transform.DORotateQuaternion(rot, moveDuration / speedModifier).SetEase(rotateCurve).OnComplete(() =>
+        {
+            psWalk.Stop();
+            psWalk.Play();
+        });
 
         yield return new WaitForSeconds((moveDuration / speedModifier) * 1.5f);
 

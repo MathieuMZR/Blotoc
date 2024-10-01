@@ -72,22 +72,11 @@ public class HUD : GenericSingletonClass<HUD>
 
     public void SetLevelInfos()
     {
-        if (!GameManager.Instance.IsInSceneEditor())
-        {
-            levelName.text = "Level " + (SceneManager.GetActiveScene().buildIndex);
-            levelNameText.text = GameManager.Instance.level.name.ToUpper();
-            
-            int amountOfCube = FindObjectsOfType<CubeSpawner>().Length;
-            cubeAmount.text = $"{GameManager.Instance.winCube.ToString().ToUpper()} / {amountOfCube.ToString().ToUpper()}";
-        }
-        else
-        {
-            levelName.text = "EDITOR";
-            foreach (var go in disableOnEditor)
-            {
-                go.SetActive(false);
-            }
-        }
+        levelName.text = "Level " + (SceneManager.GetActiveScene().buildIndex);
+        levelNameText.text = GameManager.Instance.level.name.ToUpper();
+        
+        int amountOfCube = FindObjectsOfType<CubeSpawner>().Length;
+        cubeAmount.text = $"{GameManager.Instance.winCube.ToString().ToUpper()} / {amountOfCube.ToString().ToUpper()}";
     }
 
     private void SetDifficultyStars()

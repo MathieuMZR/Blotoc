@@ -36,13 +36,7 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
         GameManager.Instance.onGameEnd += FilmGrain;
     }
 
-    public void ShowLevel()
-    {
-        transImg.material.SetFloat(_transition, 1f);
-        transImg.material.DOFloat(0f, _transition, duration).SetEase(ease).SetUpdate(true);
-    }
-    
-    private void HideLevel()
+    private void ShowLevel()
     {
         transImg.material.SetFloat(_transition, 1f);
         transImg.material.DOFloat(0f, _transition, duration).SetEase(ease).SetUpdate(true);
@@ -60,36 +54,15 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
     
     public IEnumerator WinLevel()
     {
-        SetImagePosition(GameManager.Instance.lastCube.transform.position);
-
         transImg.material.DOFloat(1f, _transition, duration).SetEase(ease).SetUpdate(true);
 
         yield return new WaitForSecondsRealtime(duration + 1f);
         
         var scene = SceneManager.GetActiveScene();
-        Debug.Log(SceneManager.sceneCount);
         if (scene.buildIndex + 1 < SceneManager.sceneCountInBuildSettings)
         {
             SceneManager.LoadScene(scene.buildIndex + 1);
         }
-    }
-    
-    void SetImagePosition(Vector3 worldPos)
-    {
-        return;
-        var mainCamera = GameManager.Instance.cam;
-        
-        // Convert the world position to screen position in camera space
-        Vector3 screenPos = mainCamera.WorldToScreenPoint(worldPos);
-
-        // Convert the screen position to local position in the Canvas (Screen Space - Camera)
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            transImg.GetComponentInParent<Canvas>().GetComponent<RectTransform>(),
-            screenPos, mainCamera, out Vector2 localPos);
-
-        // Set the UI image's position to this local position
-        RectTransform rectTransform = transImg.GetComponent<RectTransform>();
-        rectTransform.localPosition = localPos;
     }
     
     public IEnumerator OpenLevel(int index)

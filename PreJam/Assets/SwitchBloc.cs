@@ -5,7 +5,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class SwitchBloc : MonoBehaviour
+public class SwitchBloc : MonoBehaviour, IInteract
 {
     [SerializeField] private bool startSwitch;
     
@@ -35,12 +35,7 @@ public class SwitchBloc : MonoBehaviour
         mr.material.SetFloat("_Switch", _switchState ? 1 : 0);
     }
 
-    public void EnableColliderEditor(bool enable)
-    {
-        editorCollider.enabled = enable;
-    }
-
-    public void Switch()
+    private void Switch()
     {
         _switchState = !_switchState;
         _c.enabled = _switchState;
@@ -55,5 +50,10 @@ public class SwitchBloc : MonoBehaviour
         
         rotate.Stop();
         rotate.Play();
+    }
+
+    public void Interact(int mode)
+    {
+        Switch();
     }
 }

@@ -12,6 +12,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Plate
+    second: {fileID: 2100000, guid: c281a1d4dd801c94f93d4880e02812c5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: PlateSuperior
     second: {fileID: 2100000, guid: d8fc47f3c00dd114fb922240275122b5, type: 2}
   materials:

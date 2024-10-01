@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class DirectionChanger : MonoBehaviour, ILevelEditorModify
+public class DirectionChanger : MonoBehaviour, IInteract
 {
     public Vector3 direction;
     
@@ -33,7 +33,7 @@ public class DirectionChanger : MonoBehaviour, ILevelEditorModify
         }
     }
 
-    public void SetNewDirection(int mode)
+    private void SetNewDirection(int mode)
     {
         if (!canMove) return;
         
@@ -83,13 +83,11 @@ public class DirectionChanger : MonoBehaviour, ILevelEditorModify
         directionIndicatorPad.material.DOColor(directionIndicatorPadColors[index], duration).SetEase(Ease.InOutSine);
     }
     
-    public void ModifyFromLevelEditor()
+    public void Interact(int mode)
     {
-        Vector3 v = Quaternion.AngleAxis(90f, Vector3.up) * direction;
-        direction = v;
-        
-        SetRotation();
-        SetColorFromDirection();
+        SetNewDirection(mode);
+            
+        GetComponent<PadVFX>().ActivatePadVFX();
     }
 
     #if UNITY_EDITOR

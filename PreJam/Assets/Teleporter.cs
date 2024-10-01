@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Teleporter : MonoBehaviour
+public class Teleporter : MonoBehaviour, IInteract
 {
     [SerializeField] private bool isSecond;
     [SerializeField] private GameObject pairTeleporter;
@@ -68,7 +68,7 @@ public class Teleporter : MonoBehaviour
         GetComponent<Collider>().enabled = true;
     }
 
-    public void Switch()
+    private void Switch()
     {
         isSecond = !isSecond;
         SetMaterialFromIndex();
@@ -77,6 +77,11 @@ public class Teleporter : MonoBehaviour
     void SetMaterialFromIndex()
     {
         mr.material = mats[isSecond ? 1 : 0];
+    }
+    
+    public void Interact(int mode)
+    {
+        Switch();
     }
 
 #if UNITY_EDITOR

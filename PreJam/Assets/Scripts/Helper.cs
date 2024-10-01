@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class Helper
 {
@@ -41,5 +44,22 @@ public static class Helper
         Color modifiedColor = Color.HSVToRGB(h, s, v);
 
         return modifiedColor;
+    }
+    
+    public static (List<T>, List<GameObject>) Find<T>()
+    {
+        List<T> interfaces = new List<T>();
+        GameObject[] rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+
+        foreach( var rootGameObject in rootGameObjects )
+        {
+            T[] childrenInterfaces = rootGameObject.GetComponentsInChildren<T>();
+            foreach( var childInterface in childrenInterfaces )
+            {
+                interfaces.Add(childInterface);
+            }
+        }
+
+        return (interfaces, rootGameObjects.ToList());
     }
 }

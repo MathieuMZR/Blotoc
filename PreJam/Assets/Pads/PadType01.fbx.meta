@@ -9,6 +9,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Arrow
     second: {fileID: 2100000, guid: 8de93908a77848940939d7fa7b76ec4a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Plate
+    second: {fileID: 2100000, guid: c281a1d4dd801c94f93d4880e02812c5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
