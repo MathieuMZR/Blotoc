@@ -56,6 +56,8 @@ public class GameManager : GenericSingletonClass<GameManager>
         int amountOfCube = FindObjectsOfType<CubeSpawner>().Length;
         HUD.Instance.SetLevelInfos();
         
+        AudioManager.Instance?.PlaySoundWithPitch("CubeFinish", null, 1f + (winCube / 2f));
+        
         if (winCube == amountOfCube)
         {
             lastCube = cube;
@@ -74,6 +76,8 @@ public class GameManager : GenericSingletonClass<GameManager>
         CameraManager.Instance.CenterOnImpactDeath(lastCube.transform, 1.5f);
         
         onGameWin.Invoke();
+        
+        AudioManager.Instance?.PlaySound("LevelWin");
     }
 
     void Update()
@@ -100,12 +104,16 @@ public class GameManager : GenericSingletonClass<GameManager>
     void InputAction(RotateMode mode)
     {
         CameraManager.Instance.CameraShake(0.35f, 0.025f, 100);
+        
+        AudioManager.Instance?.PlaySound("Switch");
 
         var list = Helper.Find<IInteract>();
 
         int index = 0;
         foreach (var i in list.Item1)
         {
+            if (!list.Item2[index]) return;
+            
             if (list.Item2[index].GetComponent<Teleporter>())
             {
                 if (!list.Item2[index].GetComponent<Teleporter>().canSwitch) continue;

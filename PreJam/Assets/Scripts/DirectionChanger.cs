@@ -86,8 +86,9 @@ public class DirectionChanger : MonoBehaviour, IInteract
     public void Interact(int mode)
     {
         SetNewDirection(mode);
-            
-        GetComponent<PadVFX>().ActivatePadVFX();
+
+        transform.TryGetComponent(typeof(PadVFX), out var c);
+        if(c) (c as PadVFX).ActivatePadVFX();
     }
 
     #if UNITY_EDITOR

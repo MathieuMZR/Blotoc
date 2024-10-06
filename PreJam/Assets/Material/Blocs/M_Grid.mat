@@ -149,7 +149,7 @@ Material:
     - _Steps: 5
     - _Surface: 0
     - _ThicknessLines: 0.2
-    - _Tile: 8
+    - _Tile: 7
     - _TileDot: 8
     - _WorkflowMode: 0
     - _ZWrite: 1

@@ -50,6 +50,7 @@ public static class Helper
     {
         List<T> interfaces = new List<T>();
         GameObject[] rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+        List<GameObject> newList = new List<GameObject>();
 
         foreach( var rootGameObject in rootGameObjects )
         {
@@ -57,9 +58,10 @@ public static class Helper
             foreach( var childInterface in childrenInterfaces )
             {
                 interfaces.Add(childInterface);
+                newList.Add(rootGameObject);
             }
         }
-
-        return (interfaces, rootGameObjects.ToList());
+        
+        return (interfaces, newList);
     }
 }

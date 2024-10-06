@@ -13,6 +13,7 @@ public class WinPad : MonoBehaviour
         {
             GameManager.Instance.winCube++;
             GameManager.Instance.VerifyGame(other.GetComponent<CubeObject>());
+            
 
             var obj = other.GetComponent<CubeObject>();
             obj.CollisionManaging(false);

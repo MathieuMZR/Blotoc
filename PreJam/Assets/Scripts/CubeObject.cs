@@ -90,6 +90,8 @@ public class CubeObject : MonoBehaviour
         {
             psWalk.Stop();
             psWalk.Play();
+            
+            AudioManager.Instance?.PlaySound("CubeLand");
         });
 
         yield return new WaitForSeconds((moveDuration / speedModifier) * 1.5f);
