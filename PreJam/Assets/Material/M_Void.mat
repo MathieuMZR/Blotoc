@@ -75,7 +75,7 @@ Material:
     - _ZWriteControl: 0
     m_Colors:
     - _ColorA: {r: 0, g: 0.082953796, b: 0.14150941, a: 1}
-    - _ColorB: {r: 0, g: 0.38238993, b: 0.7169812, a: 1}
+    - _ColorB: {r: 0, g: 0.5355191, b: 1, a: 1}
     - _FogColor: {r: 0, g: 0.019443119, b: 0.16981131, a: 0}
     - _Speed: {r: 0.01, g: 0.01, b: 0, a: 0}
     - _Tiling: {r: 3, g: 3, b: 0, a: 0}
