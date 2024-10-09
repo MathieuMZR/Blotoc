@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 6343030550922343609}
   m_Layer: 7
   m_Name: BaseCubeObject
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -67,6 +67,7 @@ Transform:
   m_Children:
   - {fileID: 3770126469242842197}
   - {fileID: 806710802705016833}
+  - {fileID: 6479766351540482544}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6366481400558766182
@@ -84,16 +85,14 @@ MonoBehaviour:
   moveDuration: 0.3
   speedModifier: 1
   direction: {x: 0, y: 0, z: 0}
-  isInvisible: 0
   moveCurve: 4
   rotateCurve: 4
   pivot: {fileID: 3770126469242842197}
   psDestroy: {fileID: 7243845043243520433, guid: d5ed19208eaf91c40a1bddcd175bd55d,
     type: 3}
   psWalk: {fileID: 1902562222996819810}
+  psAppear: {fileID: 5240360773181970067}
   prePlaced: 0
-  blinkAmount: 5
-  blinkDelay: 0.05
 --- !u!54 &904574109969560468
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -345,4 +344,84 @@ ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 1498315418407637489, guid: 62180e0155c257446bc2ec22aa13c29f,
     type: 3}
   m_PrefabInstance: {fileID: 1057316416209821331}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6661551401573451618
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1948977759779311235}
+    m_Modifications:
+    - target: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8832687428465667410, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+        type: 3}
+      propertyPath: m_Name
+      value: PS_Bloc_Appear
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: df1ac7276e7e2854b83a65f73eac5cb0, type: 3}
+--- !u!198 &5240360773181970067 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1498315418407637489, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+    type: 3}
+  m_PrefabInstance: {fileID: 6661551401573451618}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6479766351540482544 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 404854057662150290, guid: df1ac7276e7e2854b83a65f73eac5cb0,
+    type: 3}
+  m_PrefabInstance: {fileID: 6661551401573451618}
   m_PrefabAsset: {fileID: 0}

@@ -11,8 +11,6 @@ public class VisionPad : MonoBehaviour, IInteract
     [SerializeField] private MeshRenderer padColor;
     [SerializeField] private Material[] mats;
     [SerializeField] private MeshRenderer[] switchIcon;
-    
-    private Coroutine _blinkRoutine;
 
     private void Start()
     {
@@ -23,16 +21,8 @@ public class VisionPad : MonoBehaviour, IInteract
     {
         if (other.GetComponent<CubeObject>())
         {
-            BlinkingAnim(other.GetComponent<CubeObject>());
+            other.GetComponent<CubeObject>().SetHided(!shouldReveal);
         }
-    }
-
-    void BlinkingAnim(CubeObject other)
-    {
-        other.isInvisible = !shouldReveal;
-        
-        if(_blinkRoutine is not null) StopCoroutine(_blinkRoutine);
-        _blinkRoutine = StartCoroutine(other.InvisibleBlink());
     }
 
     private void SetMaterialFromMode(int mode)

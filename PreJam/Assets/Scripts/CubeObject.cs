@@ -10,7 +10,6 @@ public class CubeObject : MonoBehaviour
     public float moveDuration;
     public float speedModifier = 1f;
     public Vector3 direction;
-    public bool isInvisible;
     
     [SerializeField] private Ease moveCurve;
     [SerializeField] private Ease rotateCurve;
@@ -18,6 +17,7 @@ public class CubeObject : MonoBehaviour
     [SerializeField] private Transform pivot;
     [SerializeField] private ParticleSystem psDestroy;
     [SerializeField] private ParticleSystem psWalk;
+    [SerializeField] private ParticleSystem psAppear;
 
     public bool prePlaced;
 
@@ -61,6 +61,12 @@ public class CubeObject : MonoBehaviour
         _col.enabled = enable;
     }
 
+    public void SetHided(bool hided)
+    {
+        if (!hided) psAppear.Play();
+        GetComponentInChildren<MeshRenderer>().enabled = !hided;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle")
@@ -80,7 +86,7 @@ public class CubeObject : MonoBehaviour
     public IEnumerator CubeMove()
     {
         var pos = transform.position;
-        var newPos = pos + direction * 1f;
+        var newPos = pos + direction;
         
         pivot.transform.rotation = Quaternion.identity;
         var rot = pivot.transform.rotation * GetAngleFromDirectionMoving();
@@ -134,33 +140,5 @@ public class CubeObject : MonoBehaviour
         }
 
         return Quaternion.Euler(angle);
-    }
-
-    [SerializeField] private int blinkAmount = 5;
-    [SerializeField] private float blinkDelay = 0.05f;
-    public IEnumerator InvisibleBlink()
-    {
-        var mr = GetComponentInChildren<MeshRenderer>();
-        for (int i = 0; i < blinkAmount; i++)
-        {
-            mr.enabled = isInvisible;
-            yield return new WaitForSeconds(blinkDelay);
-            mr.enabled = !isInvisible;
-            yield return new WaitForSeconds(blinkDelay);
-        }
-        
-        if (!isInvisible) yield break;
-
-        while (isInvisible)
-        {
-            yield return new WaitForSeconds(GetMoveDelay() * 3f);
-            for (int i = 0; i < 2; i++)
-            {
-                mr.enabled = isInvisible;
-                yield return new WaitForSeconds(blinkDelay);
-                mr.enabled = !isInvisible;
-                yield return new WaitForSeconds(blinkDelay);
-            }
-        }
     }
 }
