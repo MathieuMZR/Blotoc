@@ -4,6 +4,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class HUD : GenericSingletonClass<HUD>
@@ -11,7 +12,7 @@ public class HUD : GenericSingletonClass<HUD>
     [SerializeField] private CanvasGroup fadeBeforePlay;
     [SerializeField] private Animator animator;
     
-    [SerializeField] private TextMeshProUGUI levelName;
+    [SerializeField] private Text levelNameNumber;
     [SerializeField] private Text levelNameText;
     [SerializeField] private Text cubeAmount;
     [SerializeField] private Button levelNext;
@@ -72,7 +73,7 @@ public class HUD : GenericSingletonClass<HUD>
 
     public void SetLevelInfos()
     {
-        levelName.text = "Level " + (SceneManager.GetActiveScene().buildIndex);
+        levelNameNumber.text = ("Level " + (SceneManager.GetActiveScene().buildIndex)).ToUpper();
         levelNameText.text = GameManager.Instance.level.name.ToUpper();
         
         int amountOfCube = FindObjectsOfType<CubeSpawner>().Length;

@@ -9,6 +9,10 @@ using UnityEngine.Serialization;
 public class CameraManager : GenericSingletonClass<CameraManager>
 {
     [SerializeField] private float multiplierCamOrthoBase = 1.5f;
+    [SerializeField] private float offsetMouseDivider = 150f;
+    [SerializeField] private float offsetSpeed = 5f;
+    [SerializeField] private Transform mouseOffsetPivot;
+    [SerializeField] private Transform psMouse;
     
     private float _orthoBase;
     private Camera cam;
@@ -18,6 +22,24 @@ public class CameraManager : GenericSingletonClass<CameraManager>
         base.Awake();
         
         cam = GetComponentInChildren<Camera>();
+    }
+
+    private void Update()
+    {
+        if (GameManager.Instance.isWaitingGameToStart)
+        {
+            var pos = Input.mousePosition;
+            var center = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
+            var dir = (pos - center);
+            
+            mouseOffsetPivot.localPosition = Vector3.Lerp(mouseOffsetPivot.localPosition, dir.normalized * (dir.magnitude / offsetMouseDivider), 
+                Time.deltaTime * offsetSpeed);
+        }
+        else 
+            mouseOffsetPivot.localPosition = Vector3.Lerp(mouseOffsetPivot.localPosition, Vector3.zero, Time.deltaTime * offsetSpeed);
+
+        psMouse.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (Input.GetMouseButtonDown(0)) psMouse.GetComponent<ParticleSystem>().Play();
     }
 
     public void InitCameraLevel()

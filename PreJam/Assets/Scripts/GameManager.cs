@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class GameManager : GenericSingletonClass<GameManager>
 {
@@ -21,7 +22,7 @@ public class GameManager : GenericSingletonClass<GameManager>
     public Action onGameEnd;
     public Action onGameWin;
 
-    private bool _isWaitingGameToStart = true;
+    public bool isWaitingGameToStart = true;
 
     private void Start()
     {
@@ -82,11 +83,11 @@ public class GameManager : GenericSingletonClass<GameManager>
 
     void Update()
     {
-        if (_isWaitingGameToStart)
+        if (isWaitingGameToStart)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                _isWaitingGameToStart = false;
+                isWaitingGameToStart = false;
                 StartGame();
             }
         }
