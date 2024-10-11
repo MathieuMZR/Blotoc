@@ -26,7 +26,7 @@ MonoBehaviour:
     maxSoundPlaying: 1
     audioClip: {fileID: 8300000, guid: a392368a1af3794489ed5e35de86d2f2, type: 3}
   - cueName: LevelWin
-    volume: 0.1
+    volume: 0
     loop: 0
     minMaxPitch: {x: 2, y: 2}
     maxSoundPlaying: 1
@@ -37,3 +37,15 @@ MonoBehaviour:
     minMaxPitch: {x: 1.5, y: 1.5}
     maxSoundPlaying: 3
     audioClip: {fileID: 8300000, guid: 037e9d26306d1b541adbe1c549f4369f, type: 3}
+  - cueName: HoverUI
+    volume: 0.05
+    loop: 0
+    minMaxPitch: {x: 1, y: 1}
+    maxSoundPlaying: 10
+    audioClip: {fileID: 8300000, guid: 34f3f6b18c340274da40718eed980b6f, type: 3}
+  - cueName: MouseDragLoop
+    volume: 0.05
+    loop: 1
+    minMaxPitch: {x: 1, y: 1}
+    maxSoundPlaying: 1
+    audioClip: {fileID: 8300000, guid: 58c554ea5b6b5e742bbfdb7ed71c369a, type: 3}

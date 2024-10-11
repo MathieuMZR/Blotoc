@@ -10,6 +10,7 @@ public class CubeObject : MonoBehaviour
     public float moveDuration;
     public float speedModifier = 1f;
     public Vector3 direction;
+    public LayerMask surfaceMask;
     
     [SerializeField] private Ease moveCurve;
     [SerializeField] private Ease rotateCurve;
@@ -72,15 +73,20 @@ public class CubeObject : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle")
             || other.gameObject.layer == LayerMask.NameToLayer("Cube"))
         {
-            Instantiate(psDestroy, transform.position, Quaternion.identity);
-            
-            GameManager.Instance.EndGame();
-            
-            CameraManager.Instance.CenterOnImpactDeath(transform, 5f);
-            CameraManager.Instance.CameraShake(0.5f, 0.15f, 100);
-            
-            Destroy(gameObject);
+            DestroyCube();
         }
+    }
+
+    private void DestroyCube()
+    {
+        Instantiate(psDestroy, transform.position, Quaternion.identity);
+            
+        GameManager.Instance.EndGame();
+            
+        CameraManager.Instance.CenterCameraOnTarget(transform, 2f);
+        CameraManager.Instance.CameraShake(0.5f, 0.15f, 100);
+            
+        Destroy(gameObject);
     }
 
     public IEnumerator CubeMove()
@@ -102,6 +108,8 @@ public class CubeObject : MonoBehaviour
 
         yield return new WaitForSeconds((moveDuration / speedModifier) * 1.5f);
 
+        GetSurface();
+        
         StartCoroutine(CubeMove());
     }
 
@@ -115,6 +123,13 @@ public class CubeObject : MonoBehaviour
     public void SetNewSpeedModifier(float m)
     {
         speedModifier = m;
+    }
+
+    private RaycastHit _hitSurface;
+    private void GetSurface()
+    {
+        Physics.Raycast(transform.position, Vector3.down, out _hitSurface, 20f, surfaceMask);
+        if(!_hitSurface.collider) DestroyCube();
     }
 
     Quaternion GetAngleFromDirectionMoving()

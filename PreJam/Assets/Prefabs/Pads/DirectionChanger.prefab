@@ -46,7 +46,6 @@ GameObject:
   - component: {fileID: 8682628292497091039}
   - component: {fileID: 904574109969560468}
   - component: {fileID: 9000467398518732561}
-  - component: {fileID: 6506548185460054610}
   m_Layer: 0
   m_Name: DirectionChanger
   m_TagString: PlacedObjects
@@ -227,27 +226,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 0.1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &6506548185460054610
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4513496494120017222}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.2, y: 0.2, z: 1.2}
-  m_Center: {x: 0, y: -0.5, z: 0}
 --- !u!1001 &5125484877362910719
 PrefabInstance:
   m_ObjectHideFlags: 0

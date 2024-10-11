@@ -20,6 +20,9 @@ public class HUD : GenericSingletonClass<HUD>
     
     [SerializeField] private Transform difficultyContainer;
     [SerializeField] private GameObject difficultyStar;
+    
+    [SerializeField] private Transform hintObjectContainer;
+    [SerializeField] private UI_HelpButton hintObject;
 
     [SerializeField] private GameObject[] disableOnEditor;
 
@@ -32,13 +35,16 @@ public class HUD : GenericSingletonClass<HUD>
         SetLevelInfos();
         SetDifficultyStars();
         
+        foreach (var ba in GameManager.Instance.level.blocAvailables)
+        {
+            var baTemp = Instantiate(hintObject, hintObjectContainer);
+            baTemp.SetBloc(ba);
+        }
+        
         GameManager.Instance.onGameStart += FadeOutOnPlay;
         GameManager.Instance.onGameStart += () => animator.Play("HUDPlay");
-        
         GameManager.Instance.onGameEnd += () => animator.Play("HUDHide");
-        
         GameManager.Instance.onGameWin += () => animator.Play("HUDHide");
-        
         onLevelChange += () => animator.CrossFade("HUDHide", 1f);
 
         levelNext.onClick.AddListener(()=>

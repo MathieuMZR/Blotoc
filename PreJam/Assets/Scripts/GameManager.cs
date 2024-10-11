@@ -31,8 +31,6 @@ public class GameManager : GenericSingletonClass<GameManager>
 
     void InitGame()
     {
-        CameraManager.Instance.InitCameraLevel();
-        
         Time.timeScale = 1f;
 
         VerifyLevelIndex();
@@ -74,7 +72,7 @@ public class GameManager : GenericSingletonClass<GameManager>
 
     private void WinGame()
     {
-        CameraManager.Instance.CenterOnImpactDeath(lastCube.transform, 1.5f);
+        CameraManager.Instance.CenterCameraOnTarget(lastCube.transform, 4f);
         
         onGameWin.Invoke();
         
@@ -139,4 +137,6 @@ public class LevelInfo
 {
     public string name;
     public int difficulty = 1;
+
+    public List<SO_Bloc> blocAvailables = new List<SO_Bloc>();
 }

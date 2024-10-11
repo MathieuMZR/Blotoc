@@ -22,6 +22,18 @@ public class AudioManager : GenericSingletonClass<AudioManager>
         cue.SetAudioClip(c);
     }
     
+    public AudioCueObject PlaySoundOut(string cueName, Transform parent = null)
+    {
+        var c = GetCueByString(cueName);
+        
+        if(IsTooMuchSoundPlaying(cueName)) return null;
+            
+        var cue = Instantiate(audioCueObject, Vector3.zero, Quaternion.identity, parent);
+        cue.SetAudioClip(c);
+
+        return cue;
+    }
+    
     public void PlaySoundWithPitch(string cueName, Transform parent = null, float pitch = 1f)
     {
         var c = GetCueByString(cueName);
@@ -54,7 +66,7 @@ public class AudioManager : GenericSingletonClass<AudioManager>
         DOTween.To(() => musicSource.pitch, x => musicSource.pitch = x, 0.2f, 1f);
     }
 
-    AudioCue GetCueByString(string cueName) => sfxList.audioCues.Find(x => x.cueName == cueName);
+    public AudioCue GetCueByString(string cueName) => sfxList.audioCues.Find(x => x.cueName == cueName);
 }
 
 [Serializable]

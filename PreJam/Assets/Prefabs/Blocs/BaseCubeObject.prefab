@@ -85,6 +85,9 @@ MonoBehaviour:
   moveDuration: 0.3
   speedModifier: 1
   direction: {x: 0, y: 0, z: 0}
+  surfaceMask:
+    serializedVersion: 2
+    m_Bits: 1280
   moveCurve: 4
   rotateCurve: 4
   pivot: {fileID: 3770126469242842197}
