@@ -44,6 +44,8 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
 
     private IEnumerator RestartLevel()
     {
+        yield return new WaitForSeconds(duration);
+        
         transImg.material.DOFloat(1f, _transition, duration).SetEase(ease).SetUpdate(true);
 
         yield return new WaitForSecondsRealtime(duration + 1f);
@@ -54,6 +56,8 @@ public class TransitionAndVolume : GenericSingletonClass<TransitionAndVolume>
     
     public IEnumerator WinLevel()
     {
+        yield return new WaitForSeconds(duration);
+        
         transImg.material.DOFloat(1f, _transition, duration).SetEase(ease).SetUpdate(true);
 
         yield return new WaitForSecondsRealtime(duration + 1f);

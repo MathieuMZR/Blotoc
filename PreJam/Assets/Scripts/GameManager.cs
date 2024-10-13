@@ -41,6 +41,8 @@ public class GameManager : GenericSingletonClass<GameManager>
         CameraManager.Instance.StartLevelCamera();
         
         onGameStart.Invoke();
+        
+        Debug.Log("Game Sarted");
     }
     
     public void EndGame()

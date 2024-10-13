@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 335218ebc963a904a963529104f68303, type: 3}
-  m_Name: BlindPad
+  m_Name: TpPad
   m_EditorClassIdentifier: 
-  name: Blind Pad
-  description: Change the player's visibility.
-  sprite: {fileID: 21300000, guid: 9a6d21eda6591b44eb87199a49cd54b5, type: 3}
-  prefab: {fileID: 4513496494120017222, guid: 5daa25b9367b7924185b670f8c552c0d, type: 3}
-  texColor: {r: 0, g: 0.14668608, b: 1, a: 1}
+  name: Tp Pad
+  description: Tp the player.
+  sprite: {fileID: 21300000, guid: 59b650cb73fe301458dc285845a33d4e, type: 3}
+  prefab: {fileID: 4513496494120017222, guid: 11fb4a928a60cf74c94987f2469ec409, type: 3}
+  texColor: {r: 0, g: 0.40026736, b: 1, a: 1}

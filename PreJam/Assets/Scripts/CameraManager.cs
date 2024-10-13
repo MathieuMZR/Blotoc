@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
@@ -36,25 +37,59 @@ public class CameraManager : GenericSingletonClass<CameraManager>
     {
         if (GameManager.Instance.isWaitingGameToStart && Input.GetMouseButton(1))
         {
-            var pos = Input.mousePosition;
-            var center = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
-            var dir = (pos - center);
-            
-            mouseOffsetPivot.localPosition = Vector3.Lerp(mouseOffsetPivot.localPosition, dir.normalized * (dir.magnitude / offsetMouseDivider), 
-                Time.deltaTime * offsetSpeed);
-
-            if (!_dragCue) return;
-            _dragCue.volume = Mathf.Lerp(0f, AudioManager.Instance.GetCueByString("MouseDragLoop").volume,
-                Mathf.Abs(dir.magnitude / Screen.width / 2f) / (AudioManager.Instance.GetCueByString("MouseDragLoop").volume * 10f));
+            ManageMouseDrag();
+            ManageDragSound();
         }
         else 
-            mouseOffsetPivot.localPosition = Vector3.Lerp(mouseOffsetPivot.localPosition, Vector3.zero, Time.deltaTime * offsetSpeed);
-
+        {
+            ResetMouseDrag(); 
+            ResetDragSound();
+        }
+        
         psMouse.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (Input.GetMouseButtonDown(0)) psMouse.GetComponent<ParticleSystem>().Play();
     }
 
-    public void InitCameraLevel()
+    private void ManageMouseDrag()
+    {
+        var pos = Input.mousePosition;
+        var center = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
+        var dir = (pos - center);
+            
+        mouseOffsetPivot.localPosition = Vector3.Lerp(mouseOffsetPivot.localPosition, dir.normalized * (dir.magnitude / offsetMouseDivider), 
+            Time.deltaTime * offsetSpeed);
+    }
+
+    private void ResetMouseDrag()
+    {
+        mouseOffsetPivot.localPosition = Vector3.Lerp(mouseOffsetPivot.localPosition, Vector3.zero, Time.deltaTime * offsetSpeed);
+    }
+
+    private Vector3 _lastMousePos;
+    private Vector3 _actualMousePosition;
+    private void ManageDragSound()
+    {
+        _lastMousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        //lerp to get some delay with the variable's update
+        _actualMousePosition = Vector3.Lerp(_actualMousePosition, _lastMousePos, Time.deltaTime * 0.5f);
+        
+        if (!_dragCue) return;
+
+        var cue = AudioManager.Instance.GetCueByString("MouseDragLoop");
+        var dist = Vector3.Distance(_lastMousePos, _actualMousePosition);
+        
+        _dragCue.volume = Mathf.Lerp(0f, cue.volume, dist / 15f);
+        _dragCue.outputAudioMixerGroup.audioMixer.SetFloat("lowPass", Mathf.Lerp(0, 6000, dist / 5f));
+    }
+
+    private void ResetDragSound()
+    {
+        if (!_dragCue) return;
+        _dragCue.volume = Mathf.Lerp(_dragCue.volume, 0f, Time.deltaTime * 3f);
+        _dragCue.pitch = Mathf.Lerp(_dragCue.pitch, 1f, Time.deltaTime * 3f);
+    }
+
+    private void InitCameraLevel()
     {
         _orthoBase = cam.orthographicSize;
         _posBase =  cam.transform.parent.position;
@@ -64,9 +99,10 @@ public class CameraManager : GenericSingletonClass<CameraManager>
 
     public void StartLevelCamera()
     {
+        cam.DOKill();
         cam.DOOrthoSize(_orthoBase, 1f);
     }
-
+    
     public void CameraShake(float duration = 0.35f, float strength = 0.025f, int vibrato = 100)
     {
         cam.transform.DOKill();

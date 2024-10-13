@@ -16,3 +16,4 @@ MonoBehaviour:
   description: Change the player's direction.
   sprite: {fileID: 21300000, guid: 75ec0257477f2a7438d639c9d55d281b, type: 3}
   prefab: {fileID: 4513496494120017222, guid: 05997f7e40a27f14799fb1dc3c470c4d, type: 3}
+  texColor: {r: 1, g: 0.5, b: 0, a: 1}

@@ -16,3 +16,4 @@ MonoBehaviour:
   description: Make the player win.
   sprite: {fileID: 21300000, guid: d1110a5ac6e96624190368a56c8085e1, type: 3}
   prefab: {fileID: 4513496494120017222, guid: 8f9aa88b00ba2824d98a07a5ee3b3424, type: 3}
+  texColor: {r: 1, g: 0, b: 0, a: 1}

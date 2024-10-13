@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : GenericSingletonClass<AudioManager>
 {
@@ -20,6 +21,7 @@ public class AudioManager : GenericSingletonClass<AudioManager>
             
         var cue = Instantiate(audioCueObject, Vector3.zero, Quaternion.identity, parent);
         cue.SetAudioClip(c);
+        cue.GetComponent<AudioSource>().outputAudioMixerGroup = c.audioMixerGroup;
     }
     
     public AudioCueObject PlaySoundOut(string cueName, Transform parent = null)
@@ -30,6 +32,7 @@ public class AudioManager : GenericSingletonClass<AudioManager>
             
         var cue = Instantiate(audioCueObject, Vector3.zero, Quaternion.identity, parent);
         cue.SetAudioClip(c);
+        cue.GetComponent<AudioSource>().outputAudioMixerGroup = c.audioMixerGroup;
 
         return cue;
     }
@@ -76,6 +79,7 @@ public class AudioCue
     public float volume = 1f;
     public bool loop;
     public Vector2 minMaxPitch = new(1,1);
+    public AudioMixerGroup audioMixerGroup;
     
     public int maxSoundPlaying;
     

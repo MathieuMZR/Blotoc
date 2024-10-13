@@ -34,12 +34,8 @@ public class HUD : GenericSingletonClass<HUD>
         
         SetLevelInfos();
         SetDifficultyStars();
-        
-        foreach (var ba in GameManager.Instance.level.blocAvailables)
-        {
-            var baTemp = Instantiate(hintObject, hintObjectContainer);
-            baTemp.SetBloc(ba);
-        }
+
+        StartCoroutine(SetupAvailableBlocs());
         
         GameManager.Instance.onGameStart += FadeOutOnPlay;
         GameManager.Instance.onGameStart += () => animator.Play("HUDPlay");
@@ -57,6 +53,19 @@ public class HUD : GenericSingletonClass<HUD>
         });
         
         WaitForLevelStart();
+    }
+
+    private IEnumerator SetupAvailableBlocs()
+    {
+        foreach (var ba in GameManager.Instance.level.blocAvailables)
+        {
+            var baTemp = Instantiate(hintObject, hintObjectContainer);
+            baTemp.SetBloc(ba);
+
+            yield return new WaitForSeconds(baTemp.transform.GetSiblingIndex() / 50f);
+            var baDotw = baTemp.GetComponentInChildren<DOTweenAnimation>();
+            baDotw.DOPlay();
+        }
     }
     
     private void WaitForLevelStart()

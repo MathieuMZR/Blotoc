@@ -16,3 +16,4 @@ MonoBehaviour:
   description: Change the player's speed x1.5.
   sprite: {fileID: 21300000, guid: bfde19599048ea849b069f78195f0396, type: 3}
   prefab: {fileID: 4513496494120017222, guid: 9796a785e10c9cf42af479dc78a0a577, type: 3}
+  texColor: {r: 1, g: 0.9142746, b: 0, a: 1}

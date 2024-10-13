@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ public class UI_HelpButton : MonoBehaviour
         hintText.text = $"<size=20>{_bloc.name.ToUpper()}</size>\n<color=#ffffff50>{_bloc.description.ToUpper()}</color>";
         blocSprite.sprite = _bloc.sprite;
         
-        HideHint();
+        HideHint(true);
     }
     
     public void DisplayHint()
@@ -38,15 +39,17 @@ public class UI_HelpButton : MonoBehaviour
         hint.SetActive(true);
     }
 
-    public void HideHint()
+    public void HideHint(bool instant = false)
     {
+        if (instant) hint.SetActive(false);
+        
         hint.transform.DOKill();
         hint.transform.DOScale(Vector3.zero, 0.2f).SetEase(animCurvePopUp).OnComplete(() => hint.SetActive(false));
         
         CameraManager.Instance.ResetOrthoSize(1f);
     }
 
-    private GameObject[] FindObjectFromRef(string refName)
+    private GameObject[] FindObjectFromRef(string refName, string refSecondary = null)
     {
         // Find all GameObjects in the scene
         GameObject[] allObjects = FindObjectsOfType<GameObject>();
@@ -59,12 +62,18 @@ public class UI_HelpButton : MonoBehaviour
 
             // Remove the suffix if there's an underscore
             string cleanName = underscoreIndex > -1 ? obj.name.Substring(0, underscoreIndex) : obj.name;
+            string newCleanName = cleanName.Replace("(Clone)", "");
 
             // Compare the cleaned name with the target name
-            if (cleanName == refName)
+            if (newCleanName == refName)
             {
                 foundObjects.Add(obj);
             }
+        }
+
+        if (foundObjects.Count == 0)
+        {
+            foundObjects = FindObjectFromRef(refSecondary).ToList();
         }
 
         return foundObjects.ToArray();

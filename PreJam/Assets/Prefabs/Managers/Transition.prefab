@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transImg: {fileID: 2483537427568665435}
-  duration: 1
+  duration: 0.5
   ease: 4
 --- !u!223 &4761398708861611273
 Canvas:

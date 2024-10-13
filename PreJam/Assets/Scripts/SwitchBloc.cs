@@ -38,9 +38,9 @@ public class SwitchBloc : MonoBehaviour, IInteract
     private void Switch()
     {
         _switchState = !_switchState;
-        _c.enabled = _switchState;
+        if(_c) _c.enabled = _switchState;
         
-        mr.material.SetFloat("_Switch", _switchState ? 1 : 0);
+        if(mr) mr.material.SetFloat("_Switch", _switchState ? 1 : 0);
 
         transform.DOKill();
         transform.localScale = Vector3.one;

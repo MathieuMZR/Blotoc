@@ -10,4 +10,5 @@ public class SO_Bloc : ScriptableObject
     public string description;
     public Sprite sprite;
     public GameObject prefab;
+    public Color texColor;
 }
